@@ -1,4 +1,6 @@
-var WIDTH = window.innerWidth, HEIGHT = window.innerHeight,
+var _ = require('lodash'),
+
+    WIDTH = window.innerWidth, HEIGHT = window.innerHeight,
     maxFreq = 6000, maxVol = 1,
     initialFreq = 3000, initialVol = 0.5,
     coordinates = {
@@ -15,6 +17,7 @@ var WIDTH = window.innerWidth, HEIGHT = window.innerHeight,
 
     mute = document.querySelector('.mute'),
 
+    drawSinWave,
     getDocumentScroll,
     canvasDraw,
     random,
@@ -27,7 +30,7 @@ canvas.height = HEIGHT;
 oscillator.connect(gain);
 gain.connect(audioCtx.destination);
 
-oscillator.type = 0; // Sine wave
+oscillator.type = 'sine';
 oscillator.frequency.value = initialFreq; // Hertz
 oscillator.start();
 
@@ -42,19 +45,50 @@ random = function (numA, numB) {
     return numA + (Math.floor(Math.random() * (numB - numA)) + 1);
 };
 
-canvasDraw = function () {
-    var rx = coordinates.x,
-        ry = coordinates.y,
-        rc = Math.floor(30 * gain.gain.value/maxVol);
+drawSinWave = function (canvasContext, frequency, height, offsetX, offsetY) {
+    var steps = 200,
+        sinLength = WIDTH / frequency,
+        sinHeight = HEIGHT / (1 / height * 2),
 
-    canvasCtx.globalAlpha = 0.2;
+        step;
 
-    for(i=1;i<=15;i=i+2) {
-        canvasCtx.beginPath();
-        canvasCtx.fillStyle = 'rgb(' + 100+(i*10) + ',' + Math.floor((gain.gain.value/maxVol)*255) + ',' + Math.floor((oscillator.frequency.value/maxFreq)*255) + ')';
-        canvasCtx.arc(rx+random(0,50),ry+random(0,50),rc/2+i,(Math.PI/180)*0,(Math.PI/180)*360,false);
-        canvasCtx.fill();
-        canvasCtx.closePath();
+    canvasContext.lineTo(offsetX, offsetY);
+
+    _.forEach(_.range(steps), function (i) {
+        step = i / steps * (2 * Math.PI);
+        canvasContext.lineTo(offsetX + i * sinLength, offsetY + Math.sin(step) * sinHeight);
+    });
+
+    // Return the ending place
+    return (steps * sinLength) + offsetX;
+};
+
+drawSinWaves = function () {
+    var offsetX = 0, offsetY = HEIGHT / 2,
+        newOffset;
+
+    canvasCtx.clearRect (0, 0, canvas.width, canvas.height );
+    canvasCtx.moveTo(offsetX, offsetY);
+    canvasCtx.beginPath();
+
+    offsetX = drawSinWave(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
+
+    while(offsetX < WIDTH) {
+        newOffset = drawSinWave(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
+
+        offsetX = newOffset;
+    }
+
+    canvasCtx.stroke();
+    canvasCtx.closePath();
+};
+
+drawWaves = function (waveType) {
+    switch(waveType) {
+        case 'sine':
+            drawSinWaves(); break;
+        default:
+            drawSinWaves(); break;
     }
 };
 
@@ -65,7 +99,7 @@ updatePage = function (e) {
     oscillator.frequency.value = (coordinates.x/WIDTH) * maxFreq;
     gain.gain.value = (coordinates.y/HEIGHT) * maxVol;
 
-    canvasDraw();
+    drawWaves(oscillator.type);
 };
 
 mute.onclick = function() {
