@@ -14,6 +14,8 @@ var WIDTH = window.innerWidth, HEIGHT = window.innerHeight,
     canvas = document.querySelector('.canvas'),
     canvasCtx = canvas.getContext('2d'),
 
+    mute = document.querySelector('.mute'),
+
     getDocumentScroll,
     canvasDraw,
     random,
@@ -65,6 +67,18 @@ updatePage = function (e) {
     gain.gain.value = (coordinates.y/HEIGHT) * maxVol;
 
     canvasDraw();
+};
+
+mute.onclick = function() {
+    if(mute.id == "") {
+        gain.disconnect(audioCtx.destination);
+        mute.id = "activated";
+        mute.innerHTML = "Unmute";
+    } else {
+        gain.connect(audioCtx.destination);
+        mute.id = "";
+        mute.innerHTML = "Mute";
+    }
 };
 
 document.onmousemove = updatePage;
