@@ -10820,7 +10820,7 @@ canvas.height = HEIGHT;
 oscillator.connect(gain);
 gain.connect(audioCtx.destination);
 
-oscillator.type = 'sine';
+oscillator.type = 'square';
 oscillator.frequency.value = initialFreq; // Hertz
 oscillator.start();
 
@@ -10853,7 +10853,24 @@ drawSinWave = function (canvasContext, frequency, height, offsetX, offsetY) {
     return (steps * sinLength) + offsetX;
 };
 
-drawSinWaves = function () {
+drawSquareWave = function (canvasContext, frequency, height, offsetX, offsetY) {
+    var squareLength = 200 * WIDTH / frequency, // Use a scalar
+        squareHeight = HEIGHT / (1 / height * 2),
+
+        step;
+
+    canvasContext.lineTo(offsetX, offsetY);
+    canvasContext.lineTo(offsetX, offsetY + squareHeight / 2);
+    canvasContext.lineTo(offsetX + squareLength / 2, offsetY + squareHeight / 2);
+    canvasContext.lineTo(offsetX + squareLength / 2, offsetY - squareHeight / 2);
+    canvasContext.lineTo(offsetX + squareLength, offsetY - squareHeight / 2);
+    canvasContext.lineTo(offsetX + squareLength, offsetY);
+
+    // Return the ending place
+    return squareLength + offsetX;
+};
+
+_drawWaves = function (waveDrawer) {
     var offsetX = 0, offsetY = HEIGHT / 2,
         newOffset;
 
@@ -10861,10 +10878,10 @@ drawSinWaves = function () {
     canvasCtx.moveTo(offsetX, offsetY);
     canvasCtx.beginPath();
 
-    offsetX = drawSinWave(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
+    offsetX = waveDrawer(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
 
     while(offsetX < WIDTH) {
-        newOffset = drawSinWave(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
+        newOffset = waveDrawer(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
 
         offsetX = newOffset;
     }
@@ -10873,10 +10890,21 @@ drawSinWaves = function () {
     canvasCtx.closePath();
 };
 
+drawSinWaves = function () {
+    return _drawWaves(drawSinWave);
+};
+
+drawSquareWaves = function () {
+    return _drawWaves(drawSquareWave);
+};
+
+
 drawWaves = function (waveType) {
     switch(waveType) {
         case 'sine':
             drawSinWaves(); break;
+        case 'square':
+            drawSquareWaves(); break;
         default:
             drawSinWaves(); break;
     }

@@ -4,6 +4,7 @@
     <list default="true" id="0e45da34-f9ce-4cc6-9783-c1f91acc3ccb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/bundle.js" afterPath="$PROJECT_DIR$/src/js/bundle.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/js/simple.js" afterPath="$PROJECT_DIR$/src/js/simple.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webaudio.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +31,8 @@
       <file leaf-file-name="simple.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/js/simple.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5169811" vertical-offset="1086" max-vertical-offset="1952">
-              <caret line="85" column="33" selection-start-line="85" selection-start-column="33" selection-end-line="85" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.60754716" vertical-offset="862" max-vertical-offset="2400">
+              <caret line="74" column="76" selection-start-line="74" selection-start-column="76" selection-end-line="74" selection-end-column="76" />
               <folding />
             </state>
           </provider>
@@ -303,8 +304,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/js/simple.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5169811" vertical-offset="1086" max-vertical-offset="1952">
-          <caret line="85" column="33" selection-start-line="85" selection-start-column="33" selection-end-line="85" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.60754716" vertical-offset="862" max-vertical-offset="2400">
+          <caret line="74" column="76" selection-start-line="74" selection-start-column="76" selection-end-line="74" selection-end-column="76" />
           <folding />
         </state>
       </provider>
