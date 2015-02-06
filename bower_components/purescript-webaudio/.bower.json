@@ -24,15 +24,14 @@
     "purescript-strings": "*",
     "purescript-simple-dom": "waterson/purescript-simple-dom"
   },
-  "homepage": "https://github.com/waterson/purescript-webaudio",
-  "_release": "1104d42945",
+  "homepage": "https://github.com/5outh/purescript-webaudio",
+  "_release": "f1d0df71ca",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "1104d42945cd3f17974098beb322e42b3569556f"
+    "commit": "f1d0df71ca5c2f7cf75c36664aa456a2b6c89c37"
   },
-  "_source": "https://github.com/waterson/purescript-webaudio.git",
+  "_source": "git://github.com/5outh/purescript-webaudio.git",
   "_target": "*",
-  "_originalSource": "https://github.com/waterson/purescript-webaudio.git",
-  "_direct": true
+  "_originalSource": "5outh/purescript-webaudio"
 }

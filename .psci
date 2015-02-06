@@ -1,8 +1,10 @@
+:m src/ps/AnalyserNode.purs
 :m src/ps/Main.purs
 :m bower_components/purescript-arrays/src/Data/Array.purs
 :m bower_components/purescript-arrays/src/Data/Array/ST.purs
 :m bower_components/purescript-arrays/src/Data/Array/Unsafe.purs
 :m bower_components/purescript-canvas/src/Graphics/Canvas.purs
+:m bower_components/purescript-context/src/Context.purs
 :m bower_components/purescript-control/src/Control/Alt.purs
 :m bower_components/purescript-control/src/Control/Alternative.purs
 :m bower_components/purescript-control/src/Control/Apply.purs
@@ -45,6 +47,7 @@
 :m bower_components/purescript-monoid/src/Data/Monoid/Last.purs
 :m bower_components/purescript-monoid/src/Data/Monoid/Product.purs
 :m bower_components/purescript-monoid/src/Data/Monoid/Sum.purs
+:m bower_components/purescript-oo-ffi/src/Data/Foreign/OOFFI.purs
 :m bower_components/purescript-random/src/Control/Monad/Eff/Random.purs
 :m bower_components/purescript-simple-dom/src/Data/DOM/Simple/Ajax.purs
 :m bower_components/purescript-simple-dom/src/Data/DOM/Simple/Document.purs
@@ -95,6 +98,7 @@
 :m bower_components/purescript-transformers/src/Control/Monad/Writer/Trans.purs
 :m bower_components/purescript-tuples/src/Data/Tuple.purs
 :m bower_components/purescript-unfoldable/src/Data/Unfoldable.purs
+:m bower_components/purescript-webaudio/src/Audio/WebAudio/AnalyserNode.purs
 :m bower_components/purescript-webaudio/src/Audio/WebAudio/AudioBufferSourceNode.purs
 :m bower_components/purescript-webaudio/src/Audio/WebAudio/AudioContext.purs
 :m bower_components/purescript-webaudio/src/Audio/WebAudio/AudioParam.purs

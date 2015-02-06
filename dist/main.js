@@ -3,96 +3,24 @@ var PS = PS || {};
 PS.Prelude = (function () {
     "use strict";
     
-    function numAdd(n1) {
-      return function(n2) {
-        return n1 + n2;
-      };
+    function showNumberImpl(n) {
+      return n.toString();
     }
     ;
     
-    function numSub(n1) {
-      return function(n2) {
-        return n1 - n2;
-      };
-    }
-    ;
-    
-    function numMul(n1) {
-      return function(n2) {
-        return n1 * n2;
-      };
-    }
-    ;
-    
-    function numDiv(n1) {
-      return function(n2) {
-        return n1 / n2;
-      };
-    }
-    ;
-    
-    function numMod(n1) {
-      return function(n2) {
-        return n1 % n2;
-      };
-    }
-    ;
-    
-    function numNegate(n) {
-      return -n;
-    }
-    ;
-    
-    function refEq(r1) {
-      return function(r2) {
-        return r1 === r2;
-      };
-    }
-    ;
-    
-    function refIneq(r1) {
-      return function(r2) {
-        return r1 !== r2;
-      };
-    }
-    ;
-    
-    function unsafeCompareImpl(lt) {
-      return function(eq) {
-        return function(gt) {
-          return function(x) {
-            return function(y) {
-              return x < y ? lt : x > y ? gt : eq;
-            };
-          };
-        };
+    function showArrayImpl(f) {
+      return function(xs) {
+        var ss = [];
+        for (var i = 0, l = xs.length; i < l; i++) {
+          ss[i] = f(xs[i]);
+        }
+        return '[' + ss.join(',') + ']';
       };
     }
     ;
     var Unit = function (x) {
         return x;
     };
-    var LT = (function () {
-        function LT() {
-
-        };
-        LT.value = new LT();
-        return LT;
-    })();
-    var GT = (function () {
-        function GT() {
-
-        };
-        GT.value = new GT();
-        return GT;
-    })();
-    var EQ = (function () {
-        function EQ() {
-
-        };
-        EQ.value = new EQ();
-        return EQ;
-    })();
     var Semigroupoid = function ($less$less$less) {
         this["<<<"] = $less$less$less;
     };
@@ -122,22 +50,6 @@ PS.Prelude = (function () {
         this["__superclass_Prelude.Applicative_0"] = __superclass_Prelude$dotApplicative_0;
         this["__superclass_Prelude.Bind_1"] = __superclass_Prelude$dotBind_1;
     };
-    var Num = function ($percent, $times, $plus, $minus, $div, negate) {
-        this["%"] = $percent;
-        this["*"] = $times;
-        this["+"] = $plus;
-        this["-"] = $minus;
-        this["/"] = $div;
-        this.negate = negate;
-    };
-    var Eq = function ($div$eq, $eq$eq) {
-        this["/="] = $div$eq;
-        this["=="] = $eq$eq;
-    };
-    var Ord = function (__superclass_Prelude$dotEq_0, compare) {
-        this["__superclass_Prelude.Eq_0"] = __superclass_Prelude$dotEq_0;
-        this.compare = compare;
-    };
     var $greater$greater$eq = function (dict) {
         return dict[">>="];
     };
@@ -150,18 +62,18 @@ PS.Prelude = (function () {
     var $less$dollar$greater = function (dict) {
         return dict["<$>"];
     };
-    var $minus = function (dict) {
-        return dict["-"];
-    };
     var $dollar = function (f) {
         return function (x) {
             return f(x);
         };
     };
-    var unsafeCompare = unsafeCompareImpl(LT.value)(EQ.value)(GT.value);
     var unit = {};
+    var showNumber = new Show(showNumberImpl);
     var show = function (dict) {
         return dict.show;
+    };
+    var showArray = function (__dict_Show_3) {
+        return new Show(showArrayImpl(show(__dict_Show_3)));
     };
     var semigroupoidArr = new Semigroupoid(function (f) {
         return function (g) {
@@ -176,8 +88,6 @@ PS.Prelude = (function () {
     var $$return = function (__dict_Monad_5) {
         return pure(__dict_Monad_5["__superclass_Prelude.Applicative_0"]());
     };
-    var otherwise = true;
-    var numNumber = new Num(numMod, numMul, numAdd, numSub, numDiv, numNegate);
     var liftA1 = function (__dict_Applicative_7) {
         return function (f) {
             return function (a) {
@@ -188,32 +98,14 @@ PS.Prelude = (function () {
     var id = function (dict) {
         return dict.id;
     };
-    var eqNumber = new Eq(refIneq, refEq);
-    var ordNumber = new Ord(function () {
-        return eqNumber;
-    }, unsafeCompare);
-    var $$const = function (_41) {
-        return function (_42) {
-            return _41;
+    var $$const = function (_45) {
+        return function (_46) {
+            return _45;
         };
     };
     var $$void = function (__dict_Functor_9) {
         return function (fa) {
             return $less$dollar$greater(__dict_Functor_9)($$const(unit))(fa);
-        };
-    };
-    var compare = function (dict) {
-        return dict.compare;
-    };
-    var $less = function (__dict_Ord_11) {
-        return function (a1) {
-            return function (a2) {
-                var _544 = compare(__dict_Ord_11)(a1)(a2);
-                if (_544 instanceof LT) {
-                    return true;
-                };
-                return false;
-            };
         };
     };
     var categoryArr = new Category(function () {
@@ -234,12 +126,6 @@ PS.Prelude = (function () {
     };
     return {
         Unit: Unit, 
-        LT: LT, 
-        GT: GT, 
-        EQ: EQ, 
-        Ord: Ord, 
-        Eq: Eq, 
-        Num: Num, 
         Monad: Monad, 
         Bind: Bind, 
         Applicative: Applicative, 
@@ -249,11 +135,6 @@ PS.Prelude = (function () {
         Category: Category, 
         Semigroupoid: Semigroupoid, 
         unit: unit, 
-        "<": $less, 
-        compare: compare, 
-        refIneq: refIneq, 
-        refEq: refEq, 
-        "-": $minus, 
         ap: ap, 
         "return": $$return, 
         ">>=": $greater$greater$eq, 
@@ -267,18 +148,27 @@ PS.Prelude = (function () {
         id: id, 
         "<<<": $less$less$less, 
         "const": $$const, 
-        otherwise: otherwise, 
         semigroupoidArr: semigroupoidArr, 
         categoryArr: categoryArr, 
-        numNumber: numNumber, 
-        eqNumber: eqNumber, 
-        ordNumber: ordNumber
+        showNumber: showNumber, 
+        showArray: showArray
     };
 })();
 var PS = PS || {};
 PS.Data_Function = (function () {
     "use strict";
     var Prelude = PS.Prelude;
+    
+    function runFn3(fn) {
+      return function(a) {
+        return function(b) {
+          return function(c) {
+            return fn(a, b, c);
+          };
+        };
+      };
+    }
+    ;
     
     function runFn6(fn) {
       return function(a) {
@@ -297,7 +187,8 @@ PS.Data_Function = (function () {
     }
     ;
     return {
-        runFn6: runFn6
+        runFn6: runFn6, 
+        runFn3: runFn3
     };
 })();
 var PS = PS || {};
@@ -377,6 +268,29 @@ PS.Data_DOM_Simple_Unsafe_Window = (function () {
         unsafeSetTimeout: unsafeSetTimeout, 
         unsafeLocation: unsafeLocation, 
         unsafeDocument: unsafeDocument
+    };
+})();
+var PS = PS || {};
+PS.Debug_Trace = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    
+    function trace(s) {
+      return function() {
+        console.log(s);
+        return {};
+      };
+    }
+    ;
+    var print = function (__dict_Show_16) {
+        return function (o) {
+            return trace(Prelude.show(__dict_Show_16)(o));
+        };
+    };
+    return {
+        print: print, 
+        trace: trace
     };
 })();
 var PS = PS || {};
@@ -515,50 +429,50 @@ PS.Graphics_Canvas = (function () {
         Xor.value = new Xor();
         return Xor;
     })();
-    var showComposite = new Prelude.Show(function (_69) {
-        if (_69 instanceof SourceOver) {
+    var showComposite = new Prelude.Show(function (_73) {
+        if (_73 instanceof SourceOver) {
             return "source-over";
         };
-        if (_69 instanceof SourceIn) {
+        if (_73 instanceof SourceIn) {
             return "source-in";
         };
-        if (_69 instanceof SourceOut) {
+        if (_73 instanceof SourceOut) {
             return "source-out";
         };
-        if (_69 instanceof SourceAtop) {
+        if (_73 instanceof SourceAtop) {
             return "source-atop";
         };
-        if (_69 instanceof DestinationOver) {
+        if (_73 instanceof DestinationOver) {
             return "destination-over";
         };
-        if (_69 instanceof DestinationIn) {
+        if (_73 instanceof DestinationIn) {
             return "destination-in";
         };
-        if (_69 instanceof DestinationOut) {
+        if (_73 instanceof DestinationOut) {
             return "destination-out";
         };
-        if (_69 instanceof DestinationAtop) {
+        if (_73 instanceof DestinationAtop) {
             return "destination-atop";
         };
-        if (_69 instanceof Lighter) {
+        if (_73 instanceof Lighter) {
             return "lighter";
         };
-        if (_69 instanceof Copy) {
+        if (_73 instanceof Copy) {
             return "copy";
         };
-        if (_69 instanceof Xor) {
+        if (_73 instanceof Xor) {
             return "xor";
         };
         throw new Error("Failed pattern match");
     });
-    var setLineCap = function (_68) {
-        if (_68 instanceof Round) {
+    var setLineCap = function (_72) {
+        if (_72 instanceof Round) {
             return setLineCapImpl("round");
         };
-        if (_68 instanceof Square) {
+        if (_72 instanceof Square) {
             return setLineCapImpl("square");
         };
-        if (_68 instanceof Butt) {
+        if (_72 instanceof Butt) {
             return setLineCapImpl("butt");
         };
         throw new Error("Failed pattern match");
@@ -636,10 +550,10 @@ PS.Data_Coyoneda = (function () {
         return x;
     };
     var lowerCoyoneda = function (__dict_Functor_38) {
-        return function (_87) {
-            return Data_Exists.runExists(function (_85) {
-                return Prelude["<$>"](__dict_Functor_38)(_85.k)(_85.fi);
-            })(_87);
+        return function (_91) {
+            return Data_Exists.runExists(function (_89) {
+                return Prelude["<$>"](__dict_Functor_38)(_89.k)(_89.fi);
+            })(_91);
         };
     };
     var liftCoyoneda = function (fa) {
@@ -656,18 +570,18 @@ PS.Data_Coyoneda = (function () {
             }));
         };
     };
-    var functorCoyoneda = new Prelude.Functor(function (_90) {
-        return function (_91) {
-            return Data_Exists.runExists(function (_81) {
-                return coyoneda(Prelude["<<<"](Prelude.semigroupoidArr)(_90)(_81.k))(_81.fi);
-            })(_91);
+    var functorCoyoneda = new Prelude.Functor(function (_94) {
+        return function (_95) {
+            return Data_Exists.runExists(function (_85) {
+                return coyoneda(Prelude["<<<"](Prelude.semigroupoidArr)(_94)(_85.k))(_85.fi);
+            })(_95);
         };
     });
-    var liftCoyonedaT = function (_88) {
-        return function (_89) {
-            return Data_Exists.runExists(function (_86) {
-                return coyoneda(_86.k)(_88(_86.fi));
-            })(_89);
+    var liftCoyonedaT = function (_92) {
+        return function (_93) {
+            return Data_Exists.runExists(function (_90) {
+                return coyoneda(_90.k)(_92(_90.fi));
+            })(_93);
         };
     };
     var liftCoyonedaTF = function (__dict_Functor_41) {
@@ -684,21 +598,6 @@ PS.Data_Coyoneda = (function () {
         liftCoyoneda: liftCoyoneda, 
         coyoneda: coyoneda, 
         functorCoyoneda: functorCoyoneda
-    };
-})();
-var PS = PS || {};
-PS.Control_Bind = (function () {
-    "use strict";
-    var Prelude = PS.Prelude;
-    var $eq$less$less = function (__dict_Bind_58) {
-        return function (f) {
-            return function (m) {
-                return Prelude[">>="](__dict_Bind_58)(m)(f);
-            };
-        };
-    };
-    return {
-        "=<<": $eq$less$less
     };
 })();
 var PS = PS || {};
@@ -724,14 +623,14 @@ PS.Data_Either = (function () {
         };
         return Right;
     })();
-    var either = function (_108) {
-        return function (_109) {
-            return function (_110) {
-                if (_110 instanceof Left) {
-                    return _108(_110.value0);
+    var either = function (_112) {
+        return function (_113) {
+            return function (_114) {
+                if (_114 instanceof Left) {
+                    return _112(_114.value0);
                 };
-                if (_110 instanceof Right) {
-                    return _109(_110.value0);
+                if (_114 instanceof Right) {
+                    return _113(_114.value0);
                 };
                 throw new Error("Failed pattern match");
             };
@@ -829,15 +728,15 @@ PS.Control_Monad_Free = (function () {
     var wrap = function (dict) {
         return dict.wrap;
     };
-    var unsafeRight = function (_377) {
-        if (_377 instanceof Data_Either.Right) {
-            return _377.value0;
+    var unsafeRight = function (_381) {
+        if (_381 instanceof Data_Either.Right) {
+            return _381.value0;
         };
         throw new Error("Failed pattern match");
     };
-    var unsafeLeft = function (_376) {
-        if (_376 instanceof Data_Either.Left) {
-            return _376.value0;
+    var unsafeLeft = function (_380) {
+        if (_380 instanceof Data_Either.Left) {
+            return _380.value0;
         };
         throw new Error("Failed pattern match");
     };
@@ -859,25 +758,25 @@ PS.Control_Monad_Free = (function () {
         });
     };
     var functorFree = function (__dict_Functor_359) {
-        return new Prelude.Functor(function (_378) {
-            return function (_379) {
-                if (_379 instanceof Pure) {
-                    return new Pure(_378(_379.value0));
+        return new Prelude.Functor(function (_382) {
+            return function (_383) {
+                if (_383 instanceof Pure) {
+                    return new Pure(_382(_383.value0));
                 };
-                return Prelude.liftA1(applicativeFree(__dict_Functor_359))(_378)(_379);
+                return Prelude.liftA1(applicativeFree(__dict_Functor_359))(_382)(_383);
             };
         });
     };
     var bindFree = function (__dict_Functor_360) {
-        return new Prelude.Bind(function (_380) {
-            return function (_381) {
-                if (_380 instanceof Gosub) {
+        return new Prelude.Bind(function (_384) {
+            return function (_385) {
+                if (_384 instanceof Gosub) {
                     return new Gosub(function (h) {
-                        return _380.value0(function (a) {
+                        return _384.value0(function (a) {
                             return function (i) {
                                 return h(a)(function (x) {
                                     return new Gosub(function (j) {
-                                        return j(Prelude["const"](i(x)))(_381);
+                                        return j(Prelude["const"](i(x)))(_385);
                                     });
                                 });
                             };
@@ -885,7 +784,7 @@ PS.Control_Monad_Free = (function () {
                     });
                 };
                 return new Gosub(function (h) {
-                    return h(Prelude["const"](_380))(_381);
+                    return h(Prelude["const"](_384))(_385);
                 });
             };
         }, function () {
@@ -903,21 +802,21 @@ PS.Control_Monad_Free = (function () {
         }, Pure.create);
     };
     var resumeGosub = function (__dict_Functor_339) {
-        return function (_375) {
-            if (_375 instanceof Gosub) {
-                return _375.value0(function (a) {
+        return function (_379) {
+            if (_379 instanceof Gosub) {
+                return _379.value0(function (a) {
                     return function (g) {
-                        var _573 = a(Prelude.unit);
-                        if (_573 instanceof Pure) {
-                            return new Data_Either.Right(g(_573.value0));
+                        var _576 = a(Prelude.unit);
+                        if (_576 instanceof Pure) {
+                            return new Data_Either.Right(g(_576.value0));
                         };
-                        if (_573 instanceof Free) {
+                        if (_576 instanceof Free) {
                             return new Data_Either.Left(Prelude["<$>"](__dict_Functor_339)(function (h) {
                                 return Prelude[">>="](bindFree(__dict_Functor_339))(h)(g);
-                            })(_573.value0));
+                            })(_576.value0));
                         };
-                        if (_573 instanceof Gosub) {
-                            return new Data_Either.Right(_573.value0(function (b) {
+                        if (_576 instanceof Gosub) {
+                            return new Data_Either.Right(_576.value0(function (b) {
                                 return function (i) {
                                     return Prelude[">>="](bindFree(__dict_Functor_339))(b(Prelude.unit))(function (x) {
                                         return Prelude[">>="](bindFree(__dict_Functor_339))(i(x))(g);
@@ -943,14 +842,14 @@ PS.Control_Monad_Free = (function () {
                 if (f instanceof Free) {
                     return new Data_Either.Left(f.value0);
                 };
-                var _581 = resumeGosub(__dict_Functor_340)(f);
-                if (_581 instanceof Data_Either.Left) {
-                    return new Data_Either.Left(_581.value0);
+                var _584 = resumeGosub(__dict_Functor_340)(f);
+                if (_584 instanceof Data_Either.Left) {
+                    return new Data_Either.Left(_584.value0);
                 };
-                if (_581 instanceof Data_Either.Right) {
+                if (_584 instanceof Data_Either.Right) {
                     var __tco___dict_Functor_340 = __dict_Functor_340;
                     __dict_Functor_340 = __tco___dict_Functor_340;
-                    f = _581.value0;
+                    f = _584.value0;
                     continue tco;
                 };
                 throw new Error("Failed pattern match");
@@ -1392,105 +1291,105 @@ PS.Graphics_Canvas_Free = (function () {
     };
     var fill = Control_Monad_Free.liftFC(new Fill(Prelude.unit));
     var runGraphics = function (ctx) {
-        var interp = function (_385) {
-            if (_385 instanceof SetLineWidth) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setLineWidth(_385.value0)(ctx));
+        var interp = function (_389) {
+            if (_389 instanceof SetLineWidth) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setLineWidth(_389.value0)(ctx));
             };
-            if (_385 instanceof SetFillStyle) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setFillStyle(_385.value0)(ctx));
+            if (_389 instanceof SetFillStyle) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setFillStyle(_389.value0)(ctx));
             };
-            if (_385 instanceof SetStrokeStyle) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setStrokeStyle(_385.value0)(ctx));
+            if (_389 instanceof SetStrokeStyle) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setStrokeStyle(_389.value0)(ctx));
             };
-            if (_385 instanceof SetShadowColor) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowColor(_385.value0)(ctx));
+            if (_389 instanceof SetShadowColor) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setShadowColor(_389.value0)(ctx));
             };
-            if (_385 instanceof SetShadowBlur) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowBlur(_385.value0)(ctx));
+            if (_389 instanceof SetShadowBlur) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setShadowBlur(_389.value0)(ctx));
             };
-            if (_385 instanceof SetShadowOffsetX) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowOffsetX(_385.value0)(ctx));
+            if (_389 instanceof SetShadowOffsetX) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setShadowOffsetX(_389.value0)(ctx));
             };
-            if (_385 instanceof SetShadowOffsetY) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowOffsetY(_385.value0)(ctx));
+            if (_389 instanceof SetShadowOffsetY) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setShadowOffsetY(_389.value0)(ctx));
             };
-            if (_385 instanceof SetLineCap) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setLineCap(_385.value0)(ctx));
+            if (_389 instanceof SetLineCap) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setLineCap(_389.value0)(ctx));
             };
-            if (_385 instanceof SetComposite) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setGlobalCompositeOperation(ctx)(_385.value0));
+            if (_389 instanceof SetComposite) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setGlobalCompositeOperation(ctx)(_389.value0));
             };
-            if (_385 instanceof SetAlpha) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setGlobalAlpha(ctx)(_385.value0));
+            if (_389 instanceof SetAlpha) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setGlobalAlpha(ctx)(_389.value0));
             };
-            if (_385 instanceof BeginPath) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.beginPath(ctx));
+            if (_389 instanceof BeginPath) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value0))(Graphics_Canvas.beginPath(ctx));
             };
-            if (_385 instanceof Stroke) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.stroke(ctx));
+            if (_389 instanceof Stroke) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value0))(Graphics_Canvas.stroke(ctx));
             };
-            if (_385 instanceof Fill) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.fill(ctx));
+            if (_389 instanceof Fill) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value0))(Graphics_Canvas.fill(ctx));
             };
-            if (_385 instanceof Clip) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.clip(ctx));
+            if (_389 instanceof Clip) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value0))(Graphics_Canvas.clip(ctx));
             };
-            if (_385 instanceof LineTo) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.lineTo(ctx)(_385.value0)(_385.value1));
+            if (_389 instanceof LineTo) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value2))(Graphics_Canvas.lineTo(ctx)(_389.value0)(_389.value1));
             };
-            if (_385 instanceof MoveTo) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.moveTo(ctx)(_385.value0)(_385.value1));
+            if (_389 instanceof MoveTo) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value2))(Graphics_Canvas.moveTo(ctx)(_389.value0)(_389.value1));
             };
-            if (_385 instanceof ClosePath) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.closePath(ctx));
+            if (_389 instanceof ClosePath) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value0))(Graphics_Canvas.closePath(ctx));
             };
-            if (_385 instanceof Arc) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.arc(ctx)(_385.value0));
+            if (_389 instanceof Arc) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.arc(ctx)(_389.value0));
             };
-            if (_385 instanceof Rect) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.rect(ctx)(_385.value0));
+            if (_389 instanceof Rect) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.rect(ctx)(_389.value0));
             };
-            if (_385 instanceof Scale) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.scale({
-                    scaleX: _385.value0, 
-                    scaleY: _385.value1
+            if (_389 instanceof Scale) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value2))(Graphics_Canvas.scale({
+                    scaleX: _389.value0, 
+                    scaleY: _389.value1
                 })(ctx));
             };
-            if (_385 instanceof Rotate) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.rotate(_385.value0)(ctx));
+            if (_389 instanceof Rotate) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.rotate(_389.value0)(ctx));
             };
-            if (_385 instanceof Translate) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.translate({
-                    translateX: _385.value0, 
-                    translateY: _385.value1
+            if (_389 instanceof Translate) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value2))(Graphics_Canvas.translate({
+                    translateX: _389.value0, 
+                    translateY: _389.value1
                 })(ctx));
             };
-            if (_385 instanceof Transform) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.transform(_385.value0)(ctx));
+            if (_389 instanceof Transform) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.transform(_389.value0)(ctx));
             };
-            if (_385 instanceof SetFont) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setFont(_385.value0)(ctx));
+            if (_389 instanceof SetFont) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value1))(Graphics_Canvas.setFont(_389.value0)(ctx));
             };
-            if (_385 instanceof FillText) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value3))(Graphics_Canvas.fillText(ctx)(_385.value0)(_385.value1)(_385.value2));
+            if (_389 instanceof FillText) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value3))(Graphics_Canvas.fillText(ctx)(_389.value0)(_389.value1)(_389.value2));
             };
-            if (_385 instanceof StrokeText) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value3))(Graphics_Canvas.strokeText(ctx)(_385.value0)(_385.value1)(_385.value2));
+            if (_389 instanceof StrokeText) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value3))(Graphics_Canvas.strokeText(ctx)(_389.value0)(_389.value1)(_389.value2));
             };
-            if (_385 instanceof MeasureText) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(_385.value1)(Graphics_Canvas.measureText(ctx)(_385.value0));
+            if (_389 instanceof MeasureText) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(_389.value1)(Graphics_Canvas.measureText(ctx)(_389.value0));
             };
-            if (_385 instanceof Save) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.save(ctx));
+            if (_389 instanceof Save) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value0))(Graphics_Canvas.save(ctx));
             };
-            if (_385 instanceof Restore) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.restore(ctx));
+            if (_389 instanceof Restore) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value0))(Graphics_Canvas.restore(ctx));
             };
-            if (_385 instanceof GetImageData) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(_385.value4)(Graphics_Canvas.getImageData(ctx)(_385.value0)(_385.value1)(_385.value2)(_385.value3));
+            if (_389 instanceof GetImageData) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(_389.value4)(Graphics_Canvas.getImageData(ctx)(_389.value0)(_389.value1)(_389.value2)(_389.value3));
             };
-            if (_385 instanceof PutImageData) {
-                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value3))(Graphics_Canvas.putImageData(ctx)(_385.value0)(_385.value1)(_385.value2));
+            if (_389 instanceof PutImageData) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_389.value3))(Graphics_Canvas.putImageData(ctx)(_389.value0)(_389.value1)(_389.value2));
             };
             throw new Error("Failed pattern match");
         };
@@ -1501,6 +1400,19 @@ PS.Graphics_Canvas_Free = (function () {
         rect: rect, 
         fill: fill, 
         setFillStyle: setFillStyle
+    };
+})();
+var PS = PS || {};
+PS.Data_Foreign_OOFFI = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Context = PS.Context;
+    var Data_Function = PS.Data_Function;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    function setterImpl(propName, o, v){  return function(){    o[propName] = v;    return v;  };};
+    var setter = Data_Function.runFn3(setterImpl);
+    return {
+        setter: setter
     };
 })();
 var PS = PS || {};
@@ -1587,20 +1499,20 @@ PS.Audio_WebAudio_OscillatorNode = (function () {
         Custom.value = new Custom();
         return Custom;
     })();
-    var oscillatorTypeShow = new Prelude.Show(function (_540) {
-        if (_540 instanceof Sine) {
+    var oscillatorTypeShow = new Prelude.Show(function (_544) {
+        if (_544 instanceof Sine) {
             return "sine";
         };
-        if (_540 instanceof Square) {
+        if (_544 instanceof Square) {
             return "square";
         };
-        if (_540 instanceof Sawtooth) {
+        if (_544 instanceof Sawtooth) {
             return "sawtooth";
         };
-        if (_540 instanceof Triangle) {
+        if (_544 instanceof Triangle) {
             return "triangle";
         };
-        if (_540 instanceof Custom) {
+        if (_544 instanceof Custom) {
             return "custom";
         };
         throw new Error("Failed pattern match");
@@ -1623,6 +1535,17 @@ PS.Audio_WebAudio_OscillatorNode = (function () {
         frequency: frequency, 
         oscillatorTypeShow: oscillatorTypeShow, 
         audioNodeOscillatorNode: audioNodeOscillatorNode
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_GainNode = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
+    var audioNodeGainNode = Audio_WebAudio_Types.AudioNode;
+    return {
+        audioNodeGainNode: audioNodeGainNode
     };
 })();
 var PS = PS || {};
@@ -1668,11 +1591,23 @@ PS.Audio_WebAudio_AudioContext = (function () {
     return ctx.createOscillator(); 
   }; 
 };
+    function createGain(ctx) { 
+  return function() { 
+    return ctx.createGain(); 
+  }; 
+};
     function currentTime(cx) { 
   return function() { 
     return cx.currentTime; 
   }; 
 };
+    
+function createAnalyser (ctx) {
+    return function () {
+        return ctx.createAnalyser();
+    }
+}
+;
     function connect(_) { 
   return function(_) { 
     return function(source) { 
@@ -1687,10 +1622,42 @@ PS.Audio_WebAudio_AudioContext = (function () {
     var destination = Audio_WebAudio_Utils.unsafeGetProp("destination");
     return {
         connect: connect, 
+        createAnalyser: createAnalyser, 
         currentTime: currentTime, 
         destination: destination, 
+        createGain: createGain, 
         createOscillator: createOscillator, 
         makeAudioContext: makeAudioContext
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_AnalyserNode = (function () {
+    "use strict";
+    var Data_Foreign_OOFFI = PS.Data_Foreign_OOFFI;
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
+    
+function getByteTimeDomainData (analyser) {
+    return function () {
+        var bufferLength = analyser.frequencyBinCount,
+            dataArray = new Uint8Array(bufferLength);
+
+        analyser.getByteTimeDomainData(dataArray);
+        return dataArray;
+    };
+};
+;
+    
+    /**
+     *  Getters/Setters for all AnalyserNode properties 
+     */
+    var setFftSize = Data_Foreign_OOFFI.setter("fftSize");
+    var audioNodeAnalyserNode = Audio_WebAudio_Types.AudioNode;
+    return {
+        getByteTimeDomainData: getByteTimeDomainData, 
+        setFftSize: setFftSize, 
+        audioNodeAnalyserNode: audioNodeAnalyserNode
     };
 })();
 var PS = PS || {};
@@ -1703,11 +1670,14 @@ PS.Main = (function () {
     var Graphics_Canvas_Free = PS.Graphics_Canvas_Free;
     var Audio_WebAudio_AudioParam = PS.Audio_WebAudio_AudioParam;
     var Data_DOM_Simple_Window = PS.Data_DOM_Simple_Window;
+    var Audio_WebAudio_AnalyserNode = PS.Audio_WebAudio_AnalyserNode;
+    var Debug_Trace = PS.Debug_Trace;
     var Control_Bind = PS.Control_Bind;
     var Control_Monad_Eff = PS.Control_Monad_Eff;
     var Data_DOM_Simple_Types = PS.Data_DOM_Simple_Types;
     var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
     var Audio_WebAudio_DestinationNode = PS.Audio_WebAudio_DestinationNode;
+    var Audio_WebAudio_GainNode = PS.Audio_WebAudio_GainNode;
     var Control_Monad_Free = PS.Control_Monad_Free;
     var Data_Coyoneda = PS.Data_Coyoneda;
     var runCanvas = function (canvas) {
@@ -1724,45 +1694,50 @@ PS.Main = (function () {
             }));
         };
     };
-    var freqAt = function (__copy__541) {
-        var _541 = __copy__541;
-        tco: while (true) {
-            if (_541 < 1) {
-                return 440;
-            };
-            if (_541 < 2) {
-                return 880;
-            };
-            if (Prelude.otherwise) {
-                var __tco__541 = _541 - 2;
-                _541 = __tco__541;
-                continue tco;
-            };
-            throw new Error("Failed pattern match");
-        };
+    
+    /**
+     *  Placeholder
+     */
+    var freqAt = function (_545) {
+        return 440;
     };
     var play = function (ctx) {
         return function (osc) {
             var update = function __do() {
-                var _40 = Audio_WebAudio_AudioContext.currentTime(ctx)();
-                Prelude[">>="](Control_Monad_Eff.bindEff)(Audio_WebAudio_OscillatorNode.frequency(osc))(Audio_WebAudio_AudioParam.setValue(freqAt(_40)))();
+                var _43 = Audio_WebAudio_AudioContext.currentTime(ctx)();
+                Prelude[">>="](Control_Monad_Eff.bindEff)(Audio_WebAudio_OscillatorNode.frequency(osc))(Audio_WebAudio_AudioParam.setValue(freqAt(_43)))();
                 return Prelude.unit;
             };
             return Prelude["void"](Control_Monad_Eff.functorEff)(Data_DOM_Simple_Window.setInterval(Data_DOM_Simple_Window.htmlWindow)(Data_DOM_Simple_Window.globalWindow)(10)(update));
         };
     };
+    var draw = function (analyser) {
+        return function __do() {
+            Audio_WebAudio_AnalyserNode.setFftSize(analyser)(2048)();
+            var _44 = Audio_WebAudio_AnalyserNode.getByteTimeDomainData(analyser)();
+            Debug_Trace.print(Prelude.showArray(Prelude.showNumber))(_44)();
+            return Prelude.unit;
+        };
+    };
     var main = function __do() {
-        var _39 = Graphics_Canvas.getCanvasElementById("canvas")();
-        var _38 = Graphics_Canvas.getContext2D(_39)();
-        runCanvas(_39)(_38)();
-        var _37 = Audio_WebAudio_AudioContext.makeAudioContext();
-        var _36 = Audio_WebAudio_AudioContext.createOscillator(_37)();
-        Audio_WebAudio_OscillatorNode.setOscillatorType(Audio_WebAudio_OscillatorNode.Sine.value)(_36)();
-        Audio_WebAudio_OscillatorNode.startOscillator(0.0)(_36)();
-        Control_Bind["=<<"](Control_Monad_Eff.bindEff)(Audio_WebAudio_AudioContext.connect(Audio_WebAudio_OscillatorNode.audioNodeOscillatorNode)(Audio_WebAudio_DestinationNode.audioNodeDestinationNode)(_36))(Audio_WebAudio_AudioContext.destination(_37))();
-        return play(_37)(_36)();
+        var _42 = Graphics_Canvas.getCanvasElementById("canvas")();
+        var _41 = Graphics_Canvas.getContext2D(_42)();
+        runCanvas(_42)(_41)();
+        var _40 = Audio_WebAudio_AudioContext.makeAudioContext();
+        var _39 = Audio_WebAudio_AudioContext.createOscillator(_40)();
+        var _38 = Audio_WebAudio_AudioContext.createGain(_40)();
+        var _37 = Audio_WebAudio_AudioContext.createAnalyser(_40)();
+        var _36 = Audio_WebAudio_AudioContext.destination(_40)();
+        draw(_37)();
+        Audio_WebAudio_AudioContext.connect(Audio_WebAudio_OscillatorNode.audioNodeOscillatorNode)(Audio_WebAudio_GainNode.audioNodeGainNode)(_39)(_38)();
+        Audio_WebAudio_AudioContext.connect(Audio_WebAudio_GainNode.audioNodeGainNode)(Audio_WebAudio_AnalyserNode.audioNodeAnalyserNode)(_38)(_37)();
+        Audio_WebAudio_AudioContext.connect(Audio_WebAudio_AnalyserNode.audioNodeAnalyserNode)(Audio_WebAudio_DestinationNode.audioNodeDestinationNode)(_37)(_36)();
+        Audio_WebAudio_OscillatorNode.setOscillatorType(Audio_WebAudio_OscillatorNode.Sine.value)(_39)();
+        Audio_WebAudio_OscillatorNode.startOscillator(0.0)(_39)();
+        return play(_40)(_39)();
     };
     return {
+        draw: draw, 
         freqAt: freqAt, 
         play: play, 
         runCanvas: runCanvas, 

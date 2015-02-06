@@ -2,14 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e45da34-f9ce-4cc6-9783-c1f91acc3ccb" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ps/Main.purs" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ps/Chapter2.purs" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ps/TestModule.purs" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ps/AnalyserNode.purs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/purescript-monoid/.bower.json" afterPath="$PROJECT_DIR$/bower_components/purescript-monoid/.bower.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/purescript-webaudio/.bower.json" afterPath="$PROJECT_DIR$/bower_components/purescript-webaudio/.bower.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.psci" afterPath="$PROJECT_DIR$/.psci" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/purescript-webaudio/src/Audio/WebAudio/AudioContext.purs" afterPath="$PROJECT_DIR$/bower_components/purescript-webaudio/src/Audio/WebAudio/AudioContext.purs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/purescript-webaudio/src/Audio/WebAudio/DestinationNode.purs" afterPath="$PROJECT_DIR$/bower_components/purescript-webaudio/src/Audio/WebAudio/DestinationNode.purs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gruntfile.js" afterPath="$PROJECT_DIR$/Gruntfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/purescript-webaudio/Gruntfile.js" afterPath="$PROJECT_DIR$/bower_components/purescript-webaudio/Gruntfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ps/Main.purs" afterPath="$PROJECT_DIR$/src/ps/Main.purs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/purescript-webaudio/src/Audio/WebAudio/Types.purs" afterPath="$PROJECT_DIR$/bower_components/purescript-webaudio/src/Audio/WebAudio/Types.purs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower.json" afterPath="$PROJECT_DIR$/bower.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/main.js" afterPath="$PROJECT_DIR$/dist/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower_components/purescript-webaudio/package.json" afterPath="$PROJECT_DIR$/bower_components/purescript-webaudio/package.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webaudio.iws" />
@@ -34,21 +39,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="simple.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/js/simple.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1760">
-              <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="simple.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/html/simple.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.92" vertical-offset="0" max-vertical-offset="192">
-              <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
+            <state vertical-scroll-proportion="-3.84" vertical-offset="0" max-vertical-offset="192">
+              <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -64,11 +59,51 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="AnalyserNode.purs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ps/AnalyserNode.purs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="320">
+              <caret line="14" column="77" selection-start-line="14" selection-start-column="77" selection-end-line="14" selection-end-column="77" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bower.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bower.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-12.16" vertical-offset="0" max-vertical-offset="416">
+              <caret line="19" column="1" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gruntfile.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="656">
+              <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Main.purs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ps/Main.purs">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33602583" vertical-offset="96" max-vertical-offset="896">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5347334" vertical-offset="725" max-vertical-offset="1872">
+              <caret line="66" column="8" selection-start-line="66" selection-start-column="8" selection-end-line="66" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="simple.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/js/simple.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-7.111111" vertical-offset="480" max-vertical-offset="1760">
+              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="80" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -88,10 +123,12 @@
         <option value="$PROJECT_DIR$/src/ps/Chapter2.purs" />
         <option value="$PROJECT_DIR$/src/ps/TestModule.purs" />
         <option value="$PROJECT_DIR$/index.js.html" />
-        <option value="$PROJECT_DIR$/Gruntfile.js" />
         <option value="$PROJECT_DIR$/bower_components/purescript-webaudio/.bower.json" />
         <option value="$PROJECT_DIR$/src/html/simple.html" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/bower.json" />
+        <option value="$PROJECT_DIR$/Gruntfile.js" />
+        <option value="$PROJECT_DIR$/src/ps/AnalyserNode.purs" />
         <option value="$PROJECT_DIR$/src/ps/Main.purs" />
       </list>
     </option>
@@ -176,24 +213,6 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webaudio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="webaudio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -201,7 +220,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../purescript-webaudio" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
     <property name="options.splitter.main.proportions" value="0.3" />
@@ -417,14 +436,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bower.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43097642" vertical-offset="0" max-vertical-offset="594">
-          <caret line="16" column="30" selection-start-line="16" selection-start-column="30" selection-end-line="16" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.31578946" vertical-offset="0" max-vertical-offset="912">
@@ -449,30 +460,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6203554" vertical-offset="0" max-vertical-offset="656">
-          <caret line="24" column="26" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/js/simple.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1760">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/html/simple.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.92" vertical-offset="0" max-vertical-offset="192">
-          <caret line="3" column="18" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-7.04" vertical-offset="0" max-vertical-offset="272">
@@ -481,10 +468,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/html/simple.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.84" vertical-offset="0" max-vertical-offset="192">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/js/simple.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.111111" vertical-offset="480" max-vertical-offset="1760">
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="80" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ps/AnalyserNode.purs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="320">
+          <caret line="14" column="77" selection-start-line="14" selection-start-column="77" selection-end-line="14" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.16" vertical-offset="0" max-vertical-offset="416">
+          <caret line="19" column="1" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="656">
+          <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ps/Main.purs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33602583" vertical-offset="96" max-vertical-offset="896">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.5347334" vertical-offset="725" max-vertical-offset="1872">
+          <caret line="66" column="8" selection-start-line="66" selection-start-column="8" selection-end-line="66" selection-end-column="8" />
           <folding />
         </state>
       </provider>

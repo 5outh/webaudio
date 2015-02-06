@@ -14,6 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "purescript-math": "0.1.0"
+    "purescript-math": "0.1.0",
+    "purescript-webaudio": "5outh/purescript-webaudio"
   }
 }

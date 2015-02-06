@@ -29,6 +29,6 @@
     "commit": "15207309437842c9d19b2cd7b6d73c1881bfce39"
   },
   "_source": "git://github.com/purescript/purescript-monoid.git",
-  "_target": "~0.1.4",
+  "_target": "~0.1.5",
   "_originalSource": "purescript-monoid"
 }

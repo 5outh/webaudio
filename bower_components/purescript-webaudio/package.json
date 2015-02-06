@@ -6,6 +6,9 @@
     "private": true,
     "author": { "name": "Chris Waterson", "email": "waterson@maubi.net" },
     "license": "MIT",
+    "dependencies" : {
+      "purescript-oo-ffi":  "*"
+    },
     "devDependencies": {
         "grunt":            "~0.4.2",
         "grunt-purescript": "*",

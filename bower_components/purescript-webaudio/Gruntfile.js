@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         pscMake: {
             lib: {
                 src: ["<%=libFiles%>"]
-            },
+            }
         },
 
         psc: {
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks("grunt-purescript");
 
-    grunt.registerTask("build", ["pscMake:lib", "docgen", "dotPsci"]);
+    grunt.registerTask("build", ["pscMake:lib", "dotPsci"]);
     grunt.registerTask("test", ["psc:tests"]);
     grunt.registerTask("default", ["build", "test"]);
 };

@@ -10,6 +10,6 @@ foreign import data DestinationNode :: *
 foreign import data GainNode :: *
 foreign import data MediaElementAudioSourceNode :: *
 foreign import data OscillatorNode :: *
+foreign import data AnalyserNode :: *
 
 class AudioNode n
-

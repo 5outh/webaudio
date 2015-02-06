@@ -76,6 +76,15 @@ foreign import createBufferSource
   \}" :: forall wau eff. AudioContext
       -> (Eff (wau :: WebAudio | eff) AudioBufferSourceNode)
 
+foreign import createAnalyser
+"""
+function createAnalyser (ctx) {
+    return function () {
+        return ctx.createAnalyser();
+    }
+}
+""" :: forall wau eff. AudioContext -> Eff (wau :: WebAudio | eff) AnalyserNode
+
 -- XXX this is really a method on an AudioNode.
 
 foreign import connect
