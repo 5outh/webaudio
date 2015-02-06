@@ -1,24 +1,36 @@
 module.exports = function(grunt) {
-
     "use strict";
 
     grunt.initConfig({
 
         srcFiles: ["src/**/*.purs", "bower_components/**/src/**/*.purs"],
-
         psc: {
             options: {
-                main: "TestModule",
-                modules: ["Chapter2", "TestModule"]
+                main: "Main",
+                modules: ["Main"]
             },
             all: {
                 src: ["<%=srcFiles%>"],
                 dest: "dist/Main.js"
             }
         },
-        dotPsci: ["<%=srcFiles%>"]
+
+        dotPsci: ["<%=srcFiles%>"],
+
+
+        watch: {
+            scripts: {
+                files: ['src/**/*.purs'],
+                tasks: ['default'],
+                options: {
+                    spawn: false
+                }
+            }
+        }
     });
 
-    grunt.loadNpmTasks("grunt-purescript");
+
     grunt.registerTask("default", ["psc:all", "dotPsci"]);
+    grunt.loadNpmTasks('grunt-purescript');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 };

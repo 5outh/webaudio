@@ -1,0 +1,41 @@
+{
+  "name": "purescript-lazy",
+  "homepage": "https://github.com/purescript-contrib/purescript-lazy",
+  "authors": [
+    "Phil Freeman <paf31@cantab.net>",
+    "Gary Burgess <gary.burgess@gmail.com>",
+    "John A. De Goes <john@degoes.net>"
+  ],
+  "description": "Call-by-need values",
+  "keywords": [
+    "purescript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "node_modules",
+    "output",
+    "tests",
+    "tmp",
+    "bower.json",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "purescript-foldable-traversable": "~0.2.1",
+    "purescript-monoid": "~0.1.4",
+    "purescript-control": "~0.2.1",
+    "purescript-arrays": "~0.3.0"
+  },
+  "version": "0.2.0",
+  "_release": "0.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.2.0",
+    "commit": "77a86d0b9257590756ec6ca48a753f241207cf9e"
+  },
+  "_source": "git://github.com/purescript/purescript-lazy.git",
+  "_target": "~0.2.0",
+  "_originalSource": "purescript-lazy"
+}

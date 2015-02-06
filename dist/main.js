@@ -3,11 +3,6 @@ var PS = PS || {};
 PS.Prelude = (function () {
     "use strict";
     
-    function showNumberImpl(n) {
-      return n.toString();
-    }
-    ;
-    
     function numAdd(n1) {
       return function(n2) {
         return n1 + n2;
@@ -47,8 +42,85 @@ PS.Prelude = (function () {
       return -n;
     }
     ;
+    
+    function refEq(r1) {
+      return function(r2) {
+        return r1 === r2;
+      };
+    }
+    ;
+    
+    function refIneq(r1) {
+      return function(r2) {
+        return r1 !== r2;
+      };
+    }
+    ;
+    
+    function unsafeCompareImpl(lt) {
+      return function(eq) {
+        return function(gt) {
+          return function(x) {
+            return function(y) {
+              return x < y ? lt : x > y ? gt : eq;
+            };
+          };
+        };
+      };
+    }
+    ;
+    var Unit = function (x) {
+        return x;
+    };
+    var LT = (function () {
+        function LT() {
+
+        };
+        LT.value = new LT();
+        return LT;
+    })();
+    var GT = (function () {
+        function GT() {
+
+        };
+        GT.value = new GT();
+        return GT;
+    })();
+    var EQ = (function () {
+        function EQ() {
+
+        };
+        EQ.value = new EQ();
+        return EQ;
+    })();
+    var Semigroupoid = function ($less$less$less) {
+        this["<<<"] = $less$less$less;
+    };
+    var Category = function (__superclass_Prelude$dotSemigroupoid_0, id) {
+        this["__superclass_Prelude.Semigroupoid_0"] = __superclass_Prelude$dotSemigroupoid_0;
+        this.id = id;
+    };
     var Show = function (show) {
         this.show = show;
+    };
+    var Functor = function ($less$dollar$greater) {
+        this["<$>"] = $less$dollar$greater;
+    };
+    var Apply = function ($less$times$greater, __superclass_Prelude$dotFunctor_0) {
+        this["<*>"] = $less$times$greater;
+        this["__superclass_Prelude.Functor_0"] = __superclass_Prelude$dotFunctor_0;
+    };
+    var Applicative = function (__superclass_Prelude$dotApply_0, pure) {
+        this["__superclass_Prelude.Apply_0"] = __superclass_Prelude$dotApply_0;
+        this.pure = pure;
+    };
+    var Bind = function ($greater$greater$eq, __superclass_Prelude$dotApply_0) {
+        this[">>="] = $greater$greater$eq;
+        this["__superclass_Prelude.Apply_0"] = __superclass_Prelude$dotApply_0;
+    };
+    var Monad = function (__superclass_Prelude$dotApplicative_0, __superclass_Prelude$dotBind_1) {
+        this["__superclass_Prelude.Applicative_0"] = __superclass_Prelude$dotApplicative_0;
+        this["__superclass_Prelude.Bind_1"] = __superclass_Prelude$dotBind_1;
     };
     var Num = function ($percent, $times, $plus, $minus, $div, negate) {
         this["%"] = $percent;
@@ -58,85 +130,1643 @@ PS.Prelude = (function () {
         this["/"] = $div;
         this.negate = negate;
     };
-    var $plus = function (dict) {
-        return dict["+"];
+    var Eq = function ($div$eq, $eq$eq) {
+        this["/="] = $div$eq;
+        this["=="] = $eq$eq;
     };
-    var $times = function (dict) {
-        return dict["*"];
+    var Ord = function (__superclass_Prelude$dotEq_0, compare) {
+        this["__superclass_Prelude.Eq_0"] = __superclass_Prelude$dotEq_0;
+        this.compare = compare;
     };
-    var showNumber = new Show(showNumberImpl);
+    var $greater$greater$eq = function (dict) {
+        return dict[">>="];
+    };
+    var $less$less$less = function (dict) {
+        return dict["<<<"];
+    };
+    var $less$times$greater = function (dict) {
+        return dict["<*>"];
+    };
+    var $less$dollar$greater = function (dict) {
+        return dict["<$>"];
+    };
+    var $minus = function (dict) {
+        return dict["-"];
+    };
+    var $dollar = function (f) {
+        return function (x) {
+            return f(x);
+        };
+    };
+    var unsafeCompare = unsafeCompareImpl(LT.value)(EQ.value)(GT.value);
+    var unit = {};
     var show = function (dict) {
         return dict.show;
     };
+    var semigroupoidArr = new Semigroupoid(function (f) {
+        return function (g) {
+            return function (x) {
+                return f(g(x));
+            };
+        };
+    });
+    var pure = function (dict) {
+        return dict.pure;
+    };
+    var $$return = function (__dict_Monad_5) {
+        return pure(__dict_Monad_5["__superclass_Prelude.Applicative_0"]());
+    };
+    var otherwise = true;
     var numNumber = new Num(numMod, numMul, numAdd, numSub, numDiv, numNegate);
+    var liftA1 = function (__dict_Applicative_7) {
+        return function (f) {
+            return function (a) {
+                return $less$times$greater(__dict_Applicative_7["__superclass_Prelude.Apply_0"]())(pure(__dict_Applicative_7)(f))(a);
+            };
+        };
+    };
+    var id = function (dict) {
+        return dict.id;
+    };
+    var eqNumber = new Eq(refIneq, refEq);
+    var ordNumber = new Ord(function () {
+        return eqNumber;
+    }, unsafeCompare);
+    var $$const = function (_41) {
+        return function (_42) {
+            return _41;
+        };
+    };
+    var $$void = function (__dict_Functor_9) {
+        return function (fa) {
+            return $less$dollar$greater(__dict_Functor_9)($$const(unit))(fa);
+        };
+    };
+    var compare = function (dict) {
+        return dict.compare;
+    };
+    var $less = function (__dict_Ord_11) {
+        return function (a1) {
+            return function (a2) {
+                var _544 = compare(__dict_Ord_11)(a1)(a2);
+                if (_544 instanceof LT) {
+                    return true;
+                };
+                return false;
+            };
+        };
+    };
+    var categoryArr = new Category(function () {
+        return semigroupoidArr;
+    }, function (x) {
+        return x;
+    });
+    var ap = function (__dict_Monad_15) {
+        return function (f) {
+            return function (a) {
+                return $greater$greater$eq(__dict_Monad_15["__superclass_Prelude.Bind_1"]())(f)(function (_2) {
+                    return $greater$greater$eq(__dict_Monad_15["__superclass_Prelude.Bind_1"]())(a)(function (_1) {
+                        return $$return(__dict_Monad_15)(_2(_1));
+                    });
+                });
+            };
+        };
+    };
     return {
+        Unit: Unit, 
+        LT: LT, 
+        GT: GT, 
+        EQ: EQ, 
+        Ord: Ord, 
+        Eq: Eq, 
         Num: Num, 
+        Monad: Monad, 
+        Bind: Bind, 
+        Applicative: Applicative, 
+        Apply: Apply, 
+        Functor: Functor, 
         Show: Show, 
-        "*": $times, 
-        "+": $plus, 
+        Category: Category, 
+        Semigroupoid: Semigroupoid, 
+        unit: unit, 
+        "<": $less, 
+        compare: compare, 
+        refIneq: refIneq, 
+        refEq: refEq, 
+        "-": $minus, 
+        ap: ap, 
+        "return": $$return, 
+        ">>=": $greater$greater$eq, 
+        liftA1: liftA1, 
+        pure: pure, 
+        "<*>": $less$times$greater, 
+        "void": $$void, 
+        "<$>": $less$dollar$greater, 
         show: show, 
-        showNumber: showNumber, 
-        numNumber: numNumber
+        "$": $dollar, 
+        id: id, 
+        "<<<": $less$less$less, 
+        "const": $$const, 
+        otherwise: otherwise, 
+        semigroupoidArr: semigroupoidArr, 
+        categoryArr: categoryArr, 
+        numNumber: numNumber, 
+        eqNumber: eqNumber, 
+        ordNumber: ordNumber
     };
 })();
 var PS = PS || {};
-PS.Math = (function () {
+PS.Data_Function = (function () {
     "use strict";
     var Prelude = PS.Prelude;
-    var sqrt = Math.sqrt;;
-    return {
-        sqrt: sqrt
-    };
-})();
-var PS = PS || {};
-PS.Debug_Trace = (function () {
-    "use strict";
-    var Prelude = PS.Prelude;
-    var Control_Monad_Eff = PS.Control_Monad_Eff;
     
-    function trace(s) {
-      return function() {
-        console.log(s);
-        return {};
+    function runFn6(fn) {
+      return function(a) {
+        return function(b) {
+          return function(c) {
+            return function(d) {
+              return function(e) {
+                return function(f) {
+                  return fn(a, b, c, d, e, f);
+                };
+              };
+            };
+          };
+        };
       };
     }
     ;
-    var print = function (__dict_Show_16) {
-        return function (o) {
-            return trace(Prelude.show(__dict_Show_16)(o));
-        };
-    };
     return {
-        print: print, 
-        trace: trace
+        runFn6: runFn6
     };
 })();
 var PS = PS || {};
-PS.TestModule = (function () {
+PS.Data_Exists = (function () {
     "use strict";
-    var Debug_Trace = PS.Debug_Trace;
     var Prelude = PS.Prelude;
-    var Math = PS.Math;
-    var main = Debug_Trace.print(Prelude.showNumber)(9000);
+    function mkExists(fa) {  return fa;};
+    function runExists(f) {  return function(fa) {    return f(fa);  };};
     return {
+        runExists: runExists, 
+        mkExists: mkExists
+    };
+})();
+var PS = PS || {};
+PS.Control_Monad_Eff = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    
+    function returnE(a) {
+      return function() {
+        return a;
+      };
+    }
+    ;
+    
+    function bindE(a) {
+      return function(f) {
+        return function() {
+          return f(a())();
+        };
+      };
+    }
+    ;
+    var monadEff = new Prelude.Monad(function () {
+        return applicativeEff;
+    }, function () {
+        return bindEff;
+    });
+    var bindEff = new Prelude.Bind(bindE, function () {
+        return applyEff;
+    });
+    var applyEff = new Prelude.Apply(Prelude.ap(monadEff), function () {
+        return functorEff;
+    });
+    var applicativeEff = new Prelude.Applicative(function () {
+        return applyEff;
+    }, returnE);
+    var functorEff = new Prelude.Functor(Prelude.liftA1(applicativeEff));
+    return {
+        bindE: bindE, 
+        returnE: returnE, 
+        functorEff: functorEff, 
+        applyEff: applyEff, 
+        applicativeEff: applicativeEff, 
+        bindEff: bindEff, 
+        monadEff: monadEff
+    };
+})();
+var PS = PS || {};
+PS.Data_DOM_Simple_Unsafe_Window = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Data_DOM_Simple_Types = PS.Data_DOM_Simple_Types;
+    function unsafeDocument(win) {      return function () {                return win.document;            };                              };
+    function unsafeLocation(win) {     return function () {               return win.location;           };                             };
+    function unsafeSetTimeout(win) {   return function(delay) {     return function(func) {       return function() {         return win.setTimeout(func, delay);       };     };   }; };
+    function unsafeSetInterval(win) {   return function(delay) {     return function(func) {       return function() {         return win.setInterval(func, delay);       };     };   }; };
+    function unsafeClearTimeout(win) {   return function(timeout) {     return function() {       win.clearTimeout(timeout);     };   }; };
+    function unsafeInnerWidth(win) {   return function() {     return win.innerWidth;   }; };
+    function unsafeInnerHeight(win) {   return function() {     return win.innerHeight;   }; };
+    return {
+        unsafeInnerHeight: unsafeInnerHeight, 
+        unsafeInnerWidth: unsafeInnerWidth, 
+        unsafeClearTimeout: unsafeClearTimeout, 
+        unsafeSetInterval: unsafeSetInterval, 
+        unsafeSetTimeout: unsafeSetTimeout, 
+        unsafeLocation: unsafeLocation, 
+        unsafeDocument: unsafeDocument
+    };
+})();
+var PS = PS || {};
+PS.Graphics_Canvas = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    function getCanvasElementById(id) {  return function() {    return document.getElementById(id);  };};
+    function getContext2D(c) {  return function() {    return c.getContext('2d');  };};
+    function setLineWidth(width) {  return function(ctx) {    return function() {      ctx.lineWidth = width;      return ctx;    };  };};
+    function setFillStyle(style) {  return function(ctx) {    return function() {      ctx.fillStyle = style;      return ctx;    };  };};
+    function setStrokeStyle(style) {  return function(ctx) {    return function() {      ctx.strokeStyle = style;      return ctx;    };  };};
+    function setShadowColor(color) {  return function(ctx) {    return function() {      ctx.shadowColor = color;      return ctx;    };  };};
+    function setShadowBlur(blur) {  return function(ctx) {    return function() {      ctx.shadowBlur = blur;      return ctx;    };  };};
+    function setShadowOffsetX(offsetX) {  return function(ctx) {    return function() {      ctx.shadowOffsetX = offsetX;      return ctx;    };  };};
+    function setShadowOffsetY(offsetY) {  return function(ctx) {    return function() {      ctx.shadowOffsetY = offsetY;      return ctx;    };  };};
+    function setLineCapImpl(cap){  return function(ctx) {    return function() {      ctx.lineCap = cap;      return ctx;    };  };};
+    function setGlobalCompositeOperationImpl(ctx) {  return function(op) {    return function() {      ctx.globalCompositeOperation = op;      return ctx;    };  };};
+    function setGlobalAlpha(ctx) {  return function(alpha) {    return function() {      ctx.setGlobalAlpha = alpha;      return ctx;    };  };};
+    function beginPath(ctx) {  return function() {    ctx.beginPath();    return ctx;  };};
+    function stroke(ctx) {  return function() {    ctx.stroke();    return ctx;  };};
+    function fill(ctx) {  return function() {    ctx.fill();    return ctx;  };};
+    function clip(ctx) {  return function() {    ctx.clip();    return ctx;  };};
+    function lineTo(ctx) {  return function(x) {    return function(y) {      return function() {        ctx.lineTo(x, y);        return ctx;      };    };  };};
+    function moveTo(ctx) {  return function(x) {    return function(y) {      return function() {        ctx.moveTo(x, y);        return ctx;      };    };  };};
+    function closePath(ctx) {  return function() {    ctx.closePath();    return ctx;  };};
+    function arc(ctx) {  return function(a) {    return function() {      ctx.arc(a.x, a.y, a.r, a.start, a.end);      return ctx;    };  };};
+    function rect(ctx) {  return function(r) {    return function() {      ctx.rect(r.x, r.y, r.w, r.h);      return ctx;    };  };};
+    function scale(t) {  return function(ctx) {    return function() {      ctx.scale(t.scaleX, t.scaleY);      return ctx;    };  };};
+    function rotate(angle) {  return function(ctx) {    return function() {      ctx.rotate(angle);      return ctx;    };  };};
+    function translate(t) {  return function(ctx) {    return function() {      ctx.translate(t.translateX, t.translateY);      return ctx;    };  };};
+    function transform(t) {  return function(ctx) {    return function() {      ctx.transform(t.m11, t.m12, t.m21, t.m22, t.m31, t.m32);      return ctx;    };  };};
+    function setFont(fontspec) {  return function(ctx) {    return function() {      ctx.font = fontspec;      return ctx;    };  };};
+    function fillText(ctx) {  return function(text) {    return function(x) {      return function(y) {        return function() {          ctx.fillText(text, x, y);          return ctx;        };      };    };  };};
+    function strokeText(ctx) {  return function(text) {    return function(x) {      return function(y) {        return function() {          ctx.fillText(text, x, y);          return ctx;        };      };    };  };};
+    function measureText(ctx) {  return function(text) {    return function() {      return ctx.measureText(text);    };  };};
+    function save(ctx) {  return function() {    ctx.save();    return ctx;  };};
+    function restore(ctx) {  return function() {    ctx.restore();    return ctx;  };};
+    function getImageData(ctx) {  return function(x) {    return function(y) {      return function(w) {        return function(h) {          return function() { return ctx.getImageData(x, y, w, h); };        };      };    };  };};
+    function putImageData(ctx) {  return function(image_data) {    return function(x) {      return function(y) {        return function() {          ctx.putImageData(image_data, x, y);          return ctx;        };      };    };  };};
+    var Round = (function () {
+        function Round() {
+
+        };
+        Round.value = new Round();
+        return Round;
+    })();
+    var Square = (function () {
+        function Square() {
+
+        };
+        Square.value = new Square();
+        return Square;
+    })();
+    var Butt = (function () {
+        function Butt() {
+
+        };
+        Butt.value = new Butt();
+        return Butt;
+    })();
+    var SourceOver = (function () {
+        function SourceOver() {
+
+        };
+        SourceOver.value = new SourceOver();
+        return SourceOver;
+    })();
+    var SourceIn = (function () {
+        function SourceIn() {
+
+        };
+        SourceIn.value = new SourceIn();
+        return SourceIn;
+    })();
+    var SourceOut = (function () {
+        function SourceOut() {
+
+        };
+        SourceOut.value = new SourceOut();
+        return SourceOut;
+    })();
+    var SourceAtop = (function () {
+        function SourceAtop() {
+
+        };
+        SourceAtop.value = new SourceAtop();
+        return SourceAtop;
+    })();
+    var DestinationOver = (function () {
+        function DestinationOver() {
+
+        };
+        DestinationOver.value = new DestinationOver();
+        return DestinationOver;
+    })();
+    var DestinationIn = (function () {
+        function DestinationIn() {
+
+        };
+        DestinationIn.value = new DestinationIn();
+        return DestinationIn;
+    })();
+    var DestinationOut = (function () {
+        function DestinationOut() {
+
+        };
+        DestinationOut.value = new DestinationOut();
+        return DestinationOut;
+    })();
+    var DestinationAtop = (function () {
+        function DestinationAtop() {
+
+        };
+        DestinationAtop.value = new DestinationAtop();
+        return DestinationAtop;
+    })();
+    var Lighter = (function () {
+        function Lighter() {
+
+        };
+        Lighter.value = new Lighter();
+        return Lighter;
+    })();
+    var Copy = (function () {
+        function Copy() {
+
+        };
+        Copy.value = new Copy();
+        return Copy;
+    })();
+    var Xor = (function () {
+        function Xor() {
+
+        };
+        Xor.value = new Xor();
+        return Xor;
+    })();
+    var showComposite = new Prelude.Show(function (_69) {
+        if (_69 instanceof SourceOver) {
+            return "source-over";
+        };
+        if (_69 instanceof SourceIn) {
+            return "source-in";
+        };
+        if (_69 instanceof SourceOut) {
+            return "source-out";
+        };
+        if (_69 instanceof SourceAtop) {
+            return "source-atop";
+        };
+        if (_69 instanceof DestinationOver) {
+            return "destination-over";
+        };
+        if (_69 instanceof DestinationIn) {
+            return "destination-in";
+        };
+        if (_69 instanceof DestinationOut) {
+            return "destination-out";
+        };
+        if (_69 instanceof DestinationAtop) {
+            return "destination-atop";
+        };
+        if (_69 instanceof Lighter) {
+            return "lighter";
+        };
+        if (_69 instanceof Copy) {
+            return "copy";
+        };
+        if (_69 instanceof Xor) {
+            return "xor";
+        };
+        throw new Error("Failed pattern match");
+    });
+    var setLineCap = function (_68) {
+        if (_68 instanceof Round) {
+            return setLineCapImpl("round");
+        };
+        if (_68 instanceof Square) {
+            return setLineCapImpl("square");
+        };
+        if (_68 instanceof Butt) {
+            return setLineCapImpl("butt");
+        };
+        throw new Error("Failed pattern match");
+    };
+    var setGlobalCompositeOperation = function (ctx) {
+        return function (composite) {
+            return setGlobalCompositeOperationImpl(ctx)(Prelude.show(showComposite)(composite));
+        };
+    };
+    return {
+        SourceOver: SourceOver, 
+        SourceIn: SourceIn, 
+        SourceOut: SourceOut, 
+        SourceAtop: SourceAtop, 
+        DestinationOver: DestinationOver, 
+        DestinationIn: DestinationIn, 
+        DestinationOut: DestinationOut, 
+        DestinationAtop: DestinationAtop, 
+        Lighter: Lighter, 
+        Copy: Copy, 
+        Xor: Xor, 
+        Round: Round, 
+        Square: Square, 
+        Butt: Butt, 
+        putImageData: putImageData, 
+        getImageData: getImageData, 
+        restore: restore, 
+        save: save, 
+        measureText: measureText, 
+        strokeText: strokeText, 
+        fillText: fillText, 
+        setFont: setFont, 
+        transform: transform, 
+        translate: translate, 
+        rotate: rotate, 
+        scale: scale, 
+        rect: rect, 
+        arc: arc, 
+        closePath: closePath, 
+        moveTo: moveTo, 
+        lineTo: lineTo, 
+        clip: clip, 
+        fill: fill, 
+        stroke: stroke, 
+        beginPath: beginPath, 
+        setGlobalAlpha: setGlobalAlpha, 
+        setGlobalCompositeOperation: setGlobalCompositeOperation, 
+        setGlobalCompositeOperationImpl: setGlobalCompositeOperationImpl, 
+        setLineCap: setLineCap, 
+        setLineCapImpl: setLineCapImpl, 
+        setShadowOffsetY: setShadowOffsetY, 
+        setShadowOffsetX: setShadowOffsetX, 
+        setShadowBlur: setShadowBlur, 
+        setShadowColor: setShadowColor, 
+        setStrokeStyle: setStrokeStyle, 
+        setFillStyle: setFillStyle, 
+        setLineWidth: setLineWidth, 
+        getContext2D: getContext2D, 
+        getCanvasElementById: getCanvasElementById, 
+        showComposite: showComposite
+    };
+})();
+var PS = PS || {};
+PS.Data_Coyoneda = (function () {
+    "use strict";
+    var Data_Exists = PS.Data_Exists;
+    var Prelude = PS.Prelude;
+    var Control_Comonad = PS.Control_Comonad;
+    var Control_Extend = PS.Control_Extend;
+    var Control_Monad_Trans = PS.Control_Monad_Trans;
+    var CoyonedaF = function (x) {
+        return x;
+    };
+    var Coyoneda = function (x) {
+        return x;
+    };
+    var lowerCoyoneda = function (__dict_Functor_38) {
+        return function (_87) {
+            return Data_Exists.runExists(function (_85) {
+                return Prelude["<$>"](__dict_Functor_38)(_85.k)(_85.fi);
+            })(_87);
+        };
+    };
+    var liftCoyoneda = function (fa) {
+        return Coyoneda(Data_Exists.mkExists({
+            k: Prelude.id(Prelude.categoryArr), 
+            fi: fa
+        }));
+    };
+    var coyoneda = function (k) {
+        return function (fi) {
+            return Coyoneda(Data_Exists.mkExists({
+                k: k, 
+                fi: fi
+            }));
+        };
+    };
+    var functorCoyoneda = new Prelude.Functor(function (_90) {
+        return function (_91) {
+            return Data_Exists.runExists(function (_81) {
+                return coyoneda(Prelude["<<<"](Prelude.semigroupoidArr)(_90)(_81.k))(_81.fi);
+            })(_91);
+        };
+    });
+    var liftCoyonedaT = function (_88) {
+        return function (_89) {
+            return Data_Exists.runExists(function (_86) {
+                return coyoneda(_86.k)(_88(_86.fi));
+            })(_89);
+        };
+    };
+    var liftCoyonedaTF = function (__dict_Functor_41) {
+        return function (nat) {
+            return Prelude["<<<"](Prelude.semigroupoidArr)(lowerCoyoneda(__dict_Functor_41))(liftCoyonedaT(nat));
+        };
+    };
+    return {
+        CoyonedaF: CoyonedaF, 
+        Coyoneda: Coyoneda, 
+        liftCoyonedaTF: liftCoyonedaTF, 
+        liftCoyonedaT: liftCoyonedaT, 
+        lowerCoyoneda: lowerCoyoneda, 
+        liftCoyoneda: liftCoyoneda, 
+        coyoneda: coyoneda, 
+        functorCoyoneda: functorCoyoneda
+    };
+})();
+var PS = PS || {};
+PS.Control_Bind = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var $eq$less$less = function (__dict_Bind_58) {
+        return function (f) {
+            return function (m) {
+                return Prelude[">>="](__dict_Bind_58)(m)(f);
+            };
+        };
+    };
+    return {
+        "=<<": $eq$less$less
+    };
+})();
+var PS = PS || {};
+PS.Data_Either = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Control_Alt = PS.Control_Alt;
+    var Left = (function () {
+        function Left(value0) {
+            this.value0 = value0;
+        };
+        Left.create = function (value0) {
+            return new Left(value0);
+        };
+        return Left;
+    })();
+    var Right = (function () {
+        function Right(value0) {
+            this.value0 = value0;
+        };
+        Right.create = function (value0) {
+            return new Right(value0);
+        };
+        return Right;
+    })();
+    var either = function (_108) {
+        return function (_109) {
+            return function (_110) {
+                if (_110 instanceof Left) {
+                    return _108(_110.value0);
+                };
+                if (_110 instanceof Right) {
+                    return _109(_110.value0);
+                };
+                throw new Error("Failed pattern match");
+            };
+        };
+    };
+    var isRight = either(Prelude["const"](false))(Prelude["const"](true));
+    return {
+        Left: Left, 
+        Right: Right, 
+        isRight: isRight, 
+        either: either
+    };
+})();
+var PS = PS || {};
+PS.Data_DOM_Simple_Window = (function () {
+    "use strict";
+    var Data_DOM_Simple_Unsafe_Window = PS.Data_DOM_Simple_Unsafe_Window;
+    var Data_String = PS.Data_String;
+    var Data_Array = PS.Data_Array;
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Data_DOM_Simple_Types = PS.Data_DOM_Simple_Types;
+    var Data_Maybe = PS.Data_Maybe;
+    var globalWindow = window;;
+    var Window = function (clearTimeout, document, innerHeight, innerWidth, location, setInterval, setTimeout) {
+        this.clearTimeout = clearTimeout;
+        this.document = document;
+        this.innerHeight = innerHeight;
+        this.innerWidth = innerWidth;
+        this.location = location;
+        this.setInterval = setInterval;
+        this.setTimeout = setTimeout;
+    };
+    var setInterval = function (dict) {
+        return dict.setInterval;
+    };
+    var htmlWindow = new Window(Data_DOM_Simple_Unsafe_Window.unsafeClearTimeout, Data_DOM_Simple_Unsafe_Window.unsafeDocument, Data_DOM_Simple_Unsafe_Window.unsafeInnerHeight, Data_DOM_Simple_Unsafe_Window.unsafeInnerWidth, Data_DOM_Simple_Unsafe_Window.unsafeLocation, Data_DOM_Simple_Unsafe_Window.unsafeSetInterval, Data_DOM_Simple_Unsafe_Window.unsafeSetTimeout);
+    return {
+        Window: Window, 
+        globalWindow: globalWindow, 
+        setInterval: setInterval, 
+        htmlWindow: htmlWindow
+    };
+})();
+var PS = PS || {};
+PS.Control_Monad_Free = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Data_Coyoneda = PS.Data_Coyoneda;
+    var Data_Either = PS.Data_Either;
+    var Data_Inject = PS.Data_Inject;
+    var Data_Function = PS.Data_Function;
+    var Control_Monad_Trans = PS.Control_Monad_Trans;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    
+  function goEffImpl(resume, isRight, fromLeft, fromRight, fn, value) {
+    return function(){
+      while (true) {
+        var r = resume(value);
+        if (isRight(r)) return fromRight(r);
+        value = fn(fromLeft(r))();
+      }
+    };
+  };
+    var Pure = (function () {
+        function Pure(value0) {
+            this.value0 = value0;
+        };
+        Pure.create = function (value0) {
+            return new Pure(value0);
+        };
+        return Pure;
+    })();
+    var Free = (function () {
+        function Free(value0) {
+            this.value0 = value0;
+        };
+        Free.create = function (value0) {
+            return new Free(value0);
+        };
+        return Free;
+    })();
+    var Gosub = (function () {
+        function Gosub(value0) {
+            this.value0 = value0;
+        };
+        Gosub.create = function (value0) {
+            return new Gosub(value0);
+        };
+        return Gosub;
+    })();
+    var MonadFree = function (wrap) {
+        this.wrap = wrap;
+    };
+    var wrap = function (dict) {
+        return dict.wrap;
+    };
+    var unsafeRight = function (_377) {
+        if (_377 instanceof Data_Either.Right) {
+            return _377.value0;
+        };
+        throw new Error("Failed pattern match");
+    };
+    var unsafeLeft = function (_376) {
+        if (_376 instanceof Data_Either.Left) {
+            return _376.value0;
+        };
+        throw new Error("Failed pattern match");
+    };
+    var monadFreeFree = function (__dict_Functor_343) {
+        return new MonadFree(Free.create);
+    };
+    var liftF = function (__dict_Functor_347) {
+        return function (__dict_Monad_348) {
+            return function (__dict_MonadFree_349) {
+                return Prelude["<<<"](Prelude.semigroupoidArr)(wrap(__dict_MonadFree_349))(Prelude["<$>"](__dict_Functor_347)(Prelude["return"](__dict_Monad_348)));
+            };
+        };
+    };
+    var monadFree = function (__dict_Functor_344) {
+        return new Prelude.Monad(function () {
+            return applicativeFree(__dict_Functor_344);
+        }, function () {
+            return bindFree(__dict_Functor_344);
+        });
+    };
+    var functorFree = function (__dict_Functor_359) {
+        return new Prelude.Functor(function (_378) {
+            return function (_379) {
+                if (_379 instanceof Pure) {
+                    return new Pure(_378(_379.value0));
+                };
+                return Prelude.liftA1(applicativeFree(__dict_Functor_359))(_378)(_379);
+            };
+        });
+    };
+    var bindFree = function (__dict_Functor_360) {
+        return new Prelude.Bind(function (_380) {
+            return function (_381) {
+                if (_380 instanceof Gosub) {
+                    return new Gosub(function (h) {
+                        return _380.value0(function (a) {
+                            return function (i) {
+                                return h(a)(function (x) {
+                                    return new Gosub(function (j) {
+                                        return j(Prelude["const"](i(x)))(_381);
+                                    });
+                                });
+                            };
+                        });
+                    });
+                };
+                return new Gosub(function (h) {
+                    return h(Prelude["const"](_380))(_381);
+                });
+            };
+        }, function () {
+            return applyFree(__dict_Functor_360);
+        });
+    };
+    var applyFree = function (__dict_Functor_361) {
+        return new Prelude.Apply(Prelude.ap(monadFree(__dict_Functor_361)), function () {
+            return functorFree(__dict_Functor_361);
+        });
+    };
+    var applicativeFree = function (__dict_Functor_362) {
+        return new Prelude.Applicative(function () {
+            return applyFree(__dict_Functor_362);
+        }, Pure.create);
+    };
+    var resumeGosub = function (__dict_Functor_339) {
+        return function (_375) {
+            if (_375 instanceof Gosub) {
+                return _375.value0(function (a) {
+                    return function (g) {
+                        var _573 = a(Prelude.unit);
+                        if (_573 instanceof Pure) {
+                            return new Data_Either.Right(g(_573.value0));
+                        };
+                        if (_573 instanceof Free) {
+                            return new Data_Either.Left(Prelude["<$>"](__dict_Functor_339)(function (h) {
+                                return Prelude[">>="](bindFree(__dict_Functor_339))(h)(g);
+                            })(_573.value0));
+                        };
+                        if (_573 instanceof Gosub) {
+                            return new Data_Either.Right(_573.value0(function (b) {
+                                return function (i) {
+                                    return Prelude[">>="](bindFree(__dict_Functor_339))(b(Prelude.unit))(function (x) {
+                                        return Prelude[">>="](bindFree(__dict_Functor_339))(i(x))(g);
+                                    });
+                                };
+                            }));
+                        };
+                        throw new Error("Failed pattern match");
+                    };
+                });
+            };
+            throw new Error("Failed pattern match");
+        };
+    };
+    var resume = function (__copy___dict_Functor_340) {
+        return function (__copy_f) {
+            var __dict_Functor_340 = __copy___dict_Functor_340;
+            var f = __copy_f;
+            tco: while (true) {
+                if (f instanceof Pure) {
+                    return new Data_Either.Right(f.value0);
+                };
+                if (f instanceof Free) {
+                    return new Data_Either.Left(f.value0);
+                };
+                var _581 = resumeGosub(__dict_Functor_340)(f);
+                if (_581 instanceof Data_Either.Left) {
+                    return new Data_Either.Left(_581.value0);
+                };
+                if (_581 instanceof Data_Either.Right) {
+                    var __tco___dict_Functor_340 = __dict_Functor_340;
+                    __dict_Functor_340 = __tco___dict_Functor_340;
+                    f = _581.value0;
+                    continue tco;
+                };
+                throw new Error("Failed pattern match");
+            };
+        };
+    };
+    var goEff = function (__dict_Functor_357) {
+        return function (fn) {
+            return function (f) {
+                return goEffImpl(resume(__dict_Functor_357), Data_Either.isRight, unsafeLeft, unsafeRight, fn, f);
+            };
+        };
+    };
+    var goEffC = function (nat) {
+        return goEff(Data_Coyoneda.functorCoyoneda)(Data_Coyoneda.liftCoyonedaTF(Control_Monad_Eff.functorEff)(nat));
+    };
+    var liftFC = Prelude["<<<"](Prelude.semigroupoidArr)(liftF(Data_Coyoneda.functorCoyoneda)(monadFree(Data_Coyoneda.functorCoyoneda))(monadFreeFree(Data_Coyoneda.functorCoyoneda)))(Data_Coyoneda.liftCoyoneda);
+    return {
+        Pure: Pure, 
+        Free: Free, 
+        Gosub: Gosub, 
+        MonadFree: MonadFree, 
+        goEffC: goEffC, 
+        goEff: goEff, 
+        liftFC: liftFC, 
+        liftF: liftF, 
+        wrap: wrap, 
+        functorFree: functorFree, 
+        applyFree: applyFree, 
+        applicativeFree: applicativeFree, 
+        bindFree: bindFree, 
+        monadFree: monadFree, 
+        monadFreeFree: monadFreeFree
+    };
+})();
+var PS = PS || {};
+PS.Graphics_Canvas_Free = (function () {
+    "use strict";
+    var Control_Monad_Free = PS.Control_Monad_Free;
+    var Prelude = PS.Prelude;
+    var Graphics_Canvas = PS.Graphics_Canvas;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Data_Coyoneda = PS.Data_Coyoneda;
+    var SetLineWidth = (function () {
+        function SetLineWidth(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetLineWidth.create = function (value0) {
+            return function (value1) {
+                return new SetLineWidth(value0, value1);
+            };
+        };
+        return SetLineWidth;
+    })();
+    var SetFillStyle = (function () {
+        function SetFillStyle(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetFillStyle.create = function (value0) {
+            return function (value1) {
+                return new SetFillStyle(value0, value1);
+            };
+        };
+        return SetFillStyle;
+    })();
+    var SetStrokeStyle = (function () {
+        function SetStrokeStyle(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetStrokeStyle.create = function (value0) {
+            return function (value1) {
+                return new SetStrokeStyle(value0, value1);
+            };
+        };
+        return SetStrokeStyle;
+    })();
+    var SetShadowColor = (function () {
+        function SetShadowColor(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetShadowColor.create = function (value0) {
+            return function (value1) {
+                return new SetShadowColor(value0, value1);
+            };
+        };
+        return SetShadowColor;
+    })();
+    var SetShadowBlur = (function () {
+        function SetShadowBlur(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetShadowBlur.create = function (value0) {
+            return function (value1) {
+                return new SetShadowBlur(value0, value1);
+            };
+        };
+        return SetShadowBlur;
+    })();
+    var SetShadowOffsetX = (function () {
+        function SetShadowOffsetX(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetShadowOffsetX.create = function (value0) {
+            return function (value1) {
+                return new SetShadowOffsetX(value0, value1);
+            };
+        };
+        return SetShadowOffsetX;
+    })();
+    var SetShadowOffsetY = (function () {
+        function SetShadowOffsetY(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetShadowOffsetY.create = function (value0) {
+            return function (value1) {
+                return new SetShadowOffsetY(value0, value1);
+            };
+        };
+        return SetShadowOffsetY;
+    })();
+    var SetLineCap = (function () {
+        function SetLineCap(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetLineCap.create = function (value0) {
+            return function (value1) {
+                return new SetLineCap(value0, value1);
+            };
+        };
+        return SetLineCap;
+    })();
+    var SetComposite = (function () {
+        function SetComposite(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetComposite.create = function (value0) {
+            return function (value1) {
+                return new SetComposite(value0, value1);
+            };
+        };
+        return SetComposite;
+    })();
+    var SetAlpha = (function () {
+        function SetAlpha(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetAlpha.create = function (value0) {
+            return function (value1) {
+                return new SetAlpha(value0, value1);
+            };
+        };
+        return SetAlpha;
+    })();
+    var BeginPath = (function () {
+        function BeginPath(value0) {
+            this.value0 = value0;
+        };
+        BeginPath.create = function (value0) {
+            return new BeginPath(value0);
+        };
+        return BeginPath;
+    })();
+    var Stroke = (function () {
+        function Stroke(value0) {
+            this.value0 = value0;
+        };
+        Stroke.create = function (value0) {
+            return new Stroke(value0);
+        };
+        return Stroke;
+    })();
+    var Fill = (function () {
+        function Fill(value0) {
+            this.value0 = value0;
+        };
+        Fill.create = function (value0) {
+            return new Fill(value0);
+        };
+        return Fill;
+    })();
+    var Clip = (function () {
+        function Clip(value0) {
+            this.value0 = value0;
+        };
+        Clip.create = function (value0) {
+            return new Clip(value0);
+        };
+        return Clip;
+    })();
+    var LineTo = (function () {
+        function LineTo(value0, value1, value2) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+        };
+        LineTo.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return new LineTo(value0, value1, value2);
+                };
+            };
+        };
+        return LineTo;
+    })();
+    var MoveTo = (function () {
+        function MoveTo(value0, value1, value2) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+        };
+        MoveTo.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return new MoveTo(value0, value1, value2);
+                };
+            };
+        };
+        return MoveTo;
+    })();
+    var ClosePath = (function () {
+        function ClosePath(value0) {
+            this.value0 = value0;
+        };
+        ClosePath.create = function (value0) {
+            return new ClosePath(value0);
+        };
+        return ClosePath;
+    })();
+    var Arc = (function () {
+        function Arc(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        Arc.create = function (value0) {
+            return function (value1) {
+                return new Arc(value0, value1);
+            };
+        };
+        return Arc;
+    })();
+    var Rect = (function () {
+        function Rect(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        Rect.create = function (value0) {
+            return function (value1) {
+                return new Rect(value0, value1);
+            };
+        };
+        return Rect;
+    })();
+    var Scale = (function () {
+        function Scale(value0, value1, value2) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+        };
+        Scale.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return new Scale(value0, value1, value2);
+                };
+            };
+        };
+        return Scale;
+    })();
+    var Rotate = (function () {
+        function Rotate(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        Rotate.create = function (value0) {
+            return function (value1) {
+                return new Rotate(value0, value1);
+            };
+        };
+        return Rotate;
+    })();
+    var Translate = (function () {
+        function Translate(value0, value1, value2) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+        };
+        Translate.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return new Translate(value0, value1, value2);
+                };
+            };
+        };
+        return Translate;
+    })();
+    var Transform = (function () {
+        function Transform(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        Transform.create = function (value0) {
+            return function (value1) {
+                return new Transform(value0, value1);
+            };
+        };
+        return Transform;
+    })();
+    var SetFont = (function () {
+        function SetFont(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        SetFont.create = function (value0) {
+            return function (value1) {
+                return new SetFont(value0, value1);
+            };
+        };
+        return SetFont;
+    })();
+    var FillText = (function () {
+        function FillText(value0, value1, value2, value3) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+            this.value3 = value3;
+        };
+        FillText.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return function (value3) {
+                        return new FillText(value0, value1, value2, value3);
+                    };
+                };
+            };
+        };
+        return FillText;
+    })();
+    var StrokeText = (function () {
+        function StrokeText(value0, value1, value2, value3) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+            this.value3 = value3;
+        };
+        StrokeText.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return function (value3) {
+                        return new StrokeText(value0, value1, value2, value3);
+                    };
+                };
+            };
+        };
+        return StrokeText;
+    })();
+    var MeasureText = (function () {
+        function MeasureText(value0, value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        };
+        MeasureText.create = function (value0) {
+            return function (value1) {
+                return new MeasureText(value0, value1);
+            };
+        };
+        return MeasureText;
+    })();
+    var Save = (function () {
+        function Save(value0) {
+            this.value0 = value0;
+        };
+        Save.create = function (value0) {
+            return new Save(value0);
+        };
+        return Save;
+    })();
+    var Restore = (function () {
+        function Restore(value0) {
+            this.value0 = value0;
+        };
+        Restore.create = function (value0) {
+            return new Restore(value0);
+        };
+        return Restore;
+    })();
+    var GetImageData = (function () {
+        function GetImageData(value0, value1, value2, value3, value4) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+            this.value3 = value3;
+            this.value4 = value4;
+        };
+        GetImageData.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return function (value3) {
+                        return function (value4) {
+                            return new GetImageData(value0, value1, value2, value3, value4);
+                        };
+                    };
+                };
+            };
+        };
+        return GetImageData;
+    })();
+    var PutImageData = (function () {
+        function PutImageData(value0, value1, value2, value3) {
+            this.value0 = value0;
+            this.value1 = value1;
+            this.value2 = value2;
+            this.value3 = value3;
+        };
+        PutImageData.create = function (value0) {
+            return function (value1) {
+                return function (value2) {
+                    return function (value3) {
+                        return new PutImageData(value0, value1, value2, value3);
+                    };
+                };
+            };
+        };
+        return PutImageData;
+    })();
+    var setFillStyle = function (s) {
+        return Control_Monad_Free.liftFC(new SetFillStyle(s, Prelude.unit));
+    };
+    var rect = function (r) {
+        return Control_Monad_Free.liftFC(new Rect(r, Prelude.unit));
+    };
+    var fill = Control_Monad_Free.liftFC(new Fill(Prelude.unit));
+    var runGraphics = function (ctx) {
+        var interp = function (_385) {
+            if (_385 instanceof SetLineWidth) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setLineWidth(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetFillStyle) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setFillStyle(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetStrokeStyle) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setStrokeStyle(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetShadowColor) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowColor(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetShadowBlur) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowBlur(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetShadowOffsetX) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowOffsetX(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetShadowOffsetY) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setShadowOffsetY(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetLineCap) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setLineCap(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetComposite) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setGlobalCompositeOperation(ctx)(_385.value0));
+            };
+            if (_385 instanceof SetAlpha) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setGlobalAlpha(ctx)(_385.value0));
+            };
+            if (_385 instanceof BeginPath) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.beginPath(ctx));
+            };
+            if (_385 instanceof Stroke) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.stroke(ctx));
+            };
+            if (_385 instanceof Fill) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.fill(ctx));
+            };
+            if (_385 instanceof Clip) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.clip(ctx));
+            };
+            if (_385 instanceof LineTo) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.lineTo(ctx)(_385.value0)(_385.value1));
+            };
+            if (_385 instanceof MoveTo) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.moveTo(ctx)(_385.value0)(_385.value1));
+            };
+            if (_385 instanceof ClosePath) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.closePath(ctx));
+            };
+            if (_385 instanceof Arc) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.arc(ctx)(_385.value0));
+            };
+            if (_385 instanceof Rect) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.rect(ctx)(_385.value0));
+            };
+            if (_385 instanceof Scale) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.scale({
+                    scaleX: _385.value0, 
+                    scaleY: _385.value1
+                })(ctx));
+            };
+            if (_385 instanceof Rotate) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.rotate(_385.value0)(ctx));
+            };
+            if (_385 instanceof Translate) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value2))(Graphics_Canvas.translate({
+                    translateX: _385.value0, 
+                    translateY: _385.value1
+                })(ctx));
+            };
+            if (_385 instanceof Transform) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.transform(_385.value0)(ctx));
+            };
+            if (_385 instanceof SetFont) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value1))(Graphics_Canvas.setFont(_385.value0)(ctx));
+            };
+            if (_385 instanceof FillText) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value3))(Graphics_Canvas.fillText(ctx)(_385.value0)(_385.value1)(_385.value2));
+            };
+            if (_385 instanceof StrokeText) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value3))(Graphics_Canvas.strokeText(ctx)(_385.value0)(_385.value1)(_385.value2));
+            };
+            if (_385 instanceof MeasureText) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(_385.value1)(Graphics_Canvas.measureText(ctx)(_385.value0));
+            };
+            if (_385 instanceof Save) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.save(ctx));
+            };
+            if (_385 instanceof Restore) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value0))(Graphics_Canvas.restore(ctx));
+            };
+            if (_385 instanceof GetImageData) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(_385.value4)(Graphics_Canvas.getImageData(ctx)(_385.value0)(_385.value1)(_385.value2)(_385.value3));
+            };
+            if (_385 instanceof PutImageData) {
+                return Prelude["<$>"](Control_Monad_Eff.functorEff)(Prelude["const"](_385.value3))(Graphics_Canvas.putImageData(ctx)(_385.value0)(_385.value1)(_385.value2));
+            };
+            throw new Error("Failed pattern match");
+        };
+        return Control_Monad_Free.goEffC(interp);
+    };
+    return {
+        runGraphics: runGraphics, 
+        rect: rect, 
+        fill: fill, 
+        setFillStyle: setFillStyle
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_Utils = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    function unsafeSetProp(prop) { 
+  return function(obj) { 
+    return function(value) { 
+      return function() { 
+        obj[prop] = value; 
+      }; 
+    }; 
+  }; 
+};
+    function unsafeGetProp(prop) { 
+  return function(obj) { 
+    return function() { 
+      return obj[prop]; 
+    }; 
+  }; 
+};
+    return {
+        unsafeGetProp: unsafeGetProp, 
+        unsafeSetProp: unsafeSetProp
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_Types = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var AudioNode = {};
+    return {
+        AudioNode: AudioNode
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_OscillatorNode = (function () {
+    "use strict";
+    var Audio_WebAudio_Utils = PS.Audio_WebAudio_Utils;
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
+    function startOscillator(when) { 
+  return function(n) { 
+    return function() { 
+      return n[n.start ? 'start' : 'noteOn'](when); 
+    }; 
+  }; 
+};
+    var Sine = (function () {
+        function Sine() {
+
+        };
+        Sine.value = new Sine();
+        return Sine;
+    })();
+    var Square = (function () {
+        function Square() {
+
+        };
+        Square.value = new Square();
+        return Square;
+    })();
+    var Sawtooth = (function () {
+        function Sawtooth() {
+
+        };
+        Sawtooth.value = new Sawtooth();
+        return Sawtooth;
+    })();
+    var Triangle = (function () {
+        function Triangle() {
+
+        };
+        Triangle.value = new Triangle();
+        return Triangle;
+    })();
+    var Custom = (function () {
+        function Custom() {
+
+        };
+        Custom.value = new Custom();
+        return Custom;
+    })();
+    var oscillatorTypeShow = new Prelude.Show(function (_540) {
+        if (_540 instanceof Sine) {
+            return "sine";
+        };
+        if (_540 instanceof Square) {
+            return "square";
+        };
+        if (_540 instanceof Sawtooth) {
+            return "sawtooth";
+        };
+        if (_540 instanceof Triangle) {
+            return "triangle";
+        };
+        if (_540 instanceof Custom) {
+            return "custom";
+        };
+        throw new Error("Failed pattern match");
+    });
+    var setOscillatorType = function (t) {
+        return function (n) {
+            return Audio_WebAudio_Utils.unsafeSetProp("type")(n)(Prelude.show(oscillatorTypeShow)(t));
+        };
+    };
+    var frequency = Audio_WebAudio_Utils.unsafeGetProp("frequency");
+    var audioNodeOscillatorNode = Audio_WebAudio_Types.AudioNode;
+    return {
+        Sine: Sine, 
+        Square: Square, 
+        Sawtooth: Sawtooth, 
+        Triangle: Triangle, 
+        Custom: Custom, 
+        startOscillator: startOscillator, 
+        setOscillatorType: setOscillatorType, 
+        frequency: frequency, 
+        oscillatorTypeShow: oscillatorTypeShow, 
+        audioNodeOscillatorNode: audioNodeOscillatorNode
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_DestinationNode = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
+    var audioNodeDestinationNode = Audio_WebAudio_Types.AudioNode;
+    return {
+        audioNodeDestinationNode: audioNodeDestinationNode
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_AudioParam = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
+    function setValue(value) { 
+  return function(param) { 
+    return function() { 
+      param.value = value; 
+    }; 
+  }; 
+};
+    return {
+        setValue: setValue
+    };
+})();
+var PS = PS || {};
+PS.Audio_WebAudio_AudioContext = (function () {
+    "use strict";
+    var Audio_WebAudio_Utils = PS.Audio_WebAudio_Utils;
+    var Prelude = PS.Prelude;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Data_Maybe = PS.Data_Maybe;
+    var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
+    function makeAudioContext() { 
+  return new (window.AudioContext || window.webkitAudioContext)(); 
+};
+    function createOscillator(ctx) { 
+  return function() { 
+    return ctx.createOscillator(); 
+  }; 
+};
+    function currentTime(cx) { 
+  return function() { 
+    return cx.currentTime; 
+  }; 
+};
+    function connect(_) { 
+  return function(_) { 
+    return function(source) { 
+      return function(sink) { 
+        return function() { 
+          source.connect(sink); 
+        }; 
+      }; 
+    }; 
+  }; 
+};
+    var destination = Audio_WebAudio_Utils.unsafeGetProp("destination");
+    return {
+        connect: connect, 
+        currentTime: currentTime, 
+        destination: destination, 
+        createOscillator: createOscillator, 
+        makeAudioContext: makeAudioContext
+    };
+})();
+var PS = PS || {};
+PS.Main = (function () {
+    "use strict";
+    var Prelude = PS.Prelude;
+    var Graphics_Canvas = PS.Graphics_Canvas;
+    var Audio_WebAudio_AudioContext = PS.Audio_WebAudio_AudioContext;
+    var Audio_WebAudio_OscillatorNode = PS.Audio_WebAudio_OscillatorNode;
+    var Graphics_Canvas_Free = PS.Graphics_Canvas_Free;
+    var Audio_WebAudio_AudioParam = PS.Audio_WebAudio_AudioParam;
+    var Data_DOM_Simple_Window = PS.Data_DOM_Simple_Window;
+    var Control_Bind = PS.Control_Bind;
+    var Control_Monad_Eff = PS.Control_Monad_Eff;
+    var Data_DOM_Simple_Types = PS.Data_DOM_Simple_Types;
+    var Audio_WebAudio_Types = PS.Audio_WebAudio_Types;
+    var Audio_WebAudio_DestinationNode = PS.Audio_WebAudio_DestinationNode;
+    var Control_Monad_Free = PS.Control_Monad_Free;
+    var Data_Coyoneda = PS.Data_Coyoneda;
+    var runCanvas = function (canvas) {
+        return function (ctx) {
+            return Graphics_Canvas_Free.runGraphics(ctx)(Prelude[">>="](Control_Monad_Free.bindFree(Data_Coyoneda.functorCoyoneda))(Graphics_Canvas_Free.setFillStyle("#00FFFF"))(function () {
+                return Prelude[">>="](Control_Monad_Free.bindFree(Data_Coyoneda.functorCoyoneda))(Graphics_Canvas_Free.rect({
+                    x: 0, 
+                    y: 0, 
+                    w: 400, 
+                    h: 600
+                }))(function () {
+                    return Graphics_Canvas_Free.fill;
+                });
+            }));
+        };
+    };
+    var freqAt = function (__copy__541) {
+        var _541 = __copy__541;
+        tco: while (true) {
+            if (_541 < 1) {
+                return 440;
+            };
+            if (_541 < 2) {
+                return 880;
+            };
+            if (Prelude.otherwise) {
+                var __tco__541 = _541 - 2;
+                _541 = __tco__541;
+                continue tco;
+            };
+            throw new Error("Failed pattern match");
+        };
+    };
+    var play = function (ctx) {
+        return function (osc) {
+            var update = function __do() {
+                var _40 = Audio_WebAudio_AudioContext.currentTime(ctx)();
+                Prelude[">>="](Control_Monad_Eff.bindEff)(Audio_WebAudio_OscillatorNode.frequency(osc))(Audio_WebAudio_AudioParam.setValue(freqAt(_40)))();
+                return Prelude.unit;
+            };
+            return Prelude["void"](Control_Monad_Eff.functorEff)(Data_DOM_Simple_Window.setInterval(Data_DOM_Simple_Window.htmlWindow)(Data_DOM_Simple_Window.globalWindow)(10)(update));
+        };
+    };
+    var main = function __do() {
+        var _39 = Graphics_Canvas.getCanvasElementById("canvas")();
+        var _38 = Graphics_Canvas.getContext2D(_39)();
+        runCanvas(_39)(_38)();
+        var _37 = Audio_WebAudio_AudioContext.makeAudioContext();
+        var _36 = Audio_WebAudio_AudioContext.createOscillator(_37)();
+        Audio_WebAudio_OscillatorNode.setOscillatorType(Audio_WebAudio_OscillatorNode.Sine.value)(_36)();
+        Audio_WebAudio_OscillatorNode.startOscillator(0.0)(_36)();
+        Control_Bind["=<<"](Control_Monad_Eff.bindEff)(Audio_WebAudio_AudioContext.connect(Audio_WebAudio_OscillatorNode.audioNodeOscillatorNode)(Audio_WebAudio_DestinationNode.audioNodeDestinationNode)(_36))(Audio_WebAudio_AudioContext.destination(_37))();
+        return play(_37)(_36)();
+    };
+    return {
+        freqAt: freqAt, 
+        play: play, 
+        runCanvas: runCanvas, 
         main: main
     };
 })();
-var PS = PS || {};
-PS.Chapter2 = (function () {
-    "use strict";
-    var Math = PS.Math;
-    var Debug_Trace = PS.Debug_Trace;
-    var Prelude = PS.Prelude;
-    var diagonal = function (w) {
-        return function (h) {
-            return Math.sqrt(w * w + h * h);
-        };
-    };
-    var main = Debug_Trace.print(Prelude.showNumber)(diagonal(3)(4));
-    return {
-        main: main, 
-        diagonal: diagonal
-    };
-})();
-PS.TestModule.main();
+PS.Main.main();
