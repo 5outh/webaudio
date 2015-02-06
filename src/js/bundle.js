@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Ben/node_modules/lodash/index.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -10787,7 +10787,7 @@
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/Ben/projects/webaudio/src/js/simple.js":[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 var _ = require('lodash'),
 
     WIDTH = window.innerWidth, HEIGHT = window.innerHeight,
@@ -10801,16 +10801,14 @@ var _ = require('lodash'),
     audioCtx = new (window.AudioContext || window.webkitAudioContext)(),
     oscillator = audioCtx.createOscillator(),
     gain = audioCtx.createGain(),
+    analyser = audioCtx.createAnalyser(),
 
     canvas = document.querySelector('.canvas'),
     canvasCtx = canvas.getContext('2d'),
 
     mute = document.querySelector('.mute'),
 
-    drawSinWave,
     getDocumentScroll,
-    canvasDraw,
-    random,
     updatePage;
 
 canvas.width = WIDTH;
@@ -10818,7 +10816,8 @@ canvas.height = HEIGHT;
 
 // Set up
 oscillator.connect(gain);
-gain.connect(audioCtx.destination);
+gain.connect(analyser);
+analyser.connect(audioCtx.destination);
 
 oscillator.type = 'square';
 oscillator.frequency.value = initialFreq; // Hertz
@@ -10831,84 +10830,47 @@ getDocumentScroll = function (direction) {
     return (document.documentElement[scrollDir] ? document.documentElement[scrollDir] : document.body[scrollDir])
 };
 
-random = function (numA, numB) {
-    return numA + (Math.floor(Math.random() * (numB - numA)) + 1);
-};
+function draw () {
 
-drawSinWave = function (canvasContext, frequency, height, offsetX, offsetY) {
-    var steps = 200,
-        sinLength = WIDTH / frequency,
-        sinHeight = HEIGHT / (1 / height * 2),
+    analyser.fftSize = 2048;
+    var bufferLength = analyser.frequencyBinCount;
+    var dataArray = new Uint8Array(bufferLength);
+    analyser.getByteTimeDomainData(dataArray);
 
-        step;
+    var drawVisual = requestAnimationFrame(draw);
 
-    canvasContext.lineTo(offsetX, offsetY);
+    analyser.getByteTimeDomainData(dataArray);
 
-    _.forEach(_.range(steps), function (i) {
-        step = i / steps * (2 * Math.PI);
-        canvasContext.lineTo(offsetX + i * sinLength, offsetY + Math.sin(step) * sinHeight);
-    });
+    canvasCtx.fillStyle = 'rgb(255, 255, 255)';
+    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    // Return the ending place
-    return (steps * sinLength) + offsetX;
-};
+    canvasCtx.lineWidth = 2;
+    canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
 
-drawSquareWave = function (canvasContext, frequency, height, offsetX, offsetY) {
-    var squareLength = 200 * WIDTH / frequency, // Use a scalar
-        squareHeight = HEIGHT / (1 / height * 2),
-
-        step;
-
-    canvasContext.lineTo(offsetX, offsetY);
-    canvasContext.lineTo(offsetX, offsetY + squareHeight / 2);
-    canvasContext.lineTo(offsetX + squareLength / 2, offsetY + squareHeight / 2);
-    canvasContext.lineTo(offsetX + squareLength / 2, offsetY - squareHeight / 2);
-    canvasContext.lineTo(offsetX + squareLength, offsetY - squareHeight / 2);
-    canvasContext.lineTo(offsetX + squareLength, offsetY);
-
-    // Return the ending place
-    return squareLength + offsetX;
-};
-
-_drawWaves = function (waveDrawer) {
-    var offsetX = 0, offsetY = HEIGHT / 2,
-        newOffset;
-
-    canvasCtx.clearRect (0, 0, canvas.width, canvas.height );
-    canvasCtx.moveTo(offsetX, offsetY);
     canvasCtx.beginPath();
 
-    offsetX = waveDrawer(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
+    var sliceWidth = WIDTH / bufferLength;
+    var x = 0;
 
-    while(offsetX < WIDTH) {
-        newOffset = waveDrawer(canvasCtx, oscillator.frequency.value, gain.gain.value, offsetX, offsetY);
+    for(var i = 0; i < bufferLength; i++) {
 
-        offsetX = newOffset;
+        var v = dataArray[i] / 128.0;
+        var y = v * HEIGHT/2;
+
+        if(i === 0) {
+            canvasCtx.moveTo(x, y);
+        } else {
+            canvasCtx.lineTo(x, y);
+        }
+
+        x += sliceWidth;
     }
 
+    canvasCtx.lineTo(canvas.width, canvas.height/2);
     canvasCtx.stroke();
-    canvasCtx.closePath();
-};
+}
 
-drawSinWaves = function () {
-    return _drawWaves(drawSinWave);
-};
-
-drawSquareWaves = function () {
-    return _drawWaves(drawSquareWave);
-};
-
-
-drawWaves = function (waveType) {
-    switch(waveType) {
-        case 'sine':
-            drawSinWaves(); break;
-        case 'square':
-            drawSquareWaves(); break;
-        default:
-            drawSinWaves(); break;
-    }
-};
+draw();
 
 updatePage = function (e) {
     coordinates.x = (window.Event) ? e.pageX : event.clientX + getDocumentScroll('Left');
@@ -10916,21 +10878,19 @@ updatePage = function (e) {
 
     oscillator.frequency.value = (coordinates.x/WIDTH) * maxFreq;
     gain.gain.value = (coordinates.y/HEIGHT) * maxVol;
-
-    drawWaves(oscillator.type);
 };
 
 mute.onclick = function() {
     if(mute.id == "") {
-        gain.disconnect(audioCtx.destination);
+        gain.disconnect(analyser);
         mute.id = "activated";
         mute.innerHTML = "Unmute";
     } else {
-        gain.connect(audioCtx.destination);
+        gain.connect(analyser);
         mute.id = "";
         mute.innerHTML = "Mute";
     }
 };
 
 document.onmousemove = updatePage;
-},{"lodash":"/Users/Ben/node_modules/lodash/index.js"}]},{},["/Users/Ben/projects/webaudio/src/js/simple.js"]);
+},{"lodash":1}]},{},[2]);

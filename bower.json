@@ -1,0 +1,19 @@
+{
+  "name": "webaudio",
+  "version": "0.0.0",
+  "homepage": "https://github.com/5outh/webaudio",
+  "authors": [
+    "Benjamin Kovach <bkovach5@uga.edu>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "purescript-math": "0.1.0"
+  }
+}

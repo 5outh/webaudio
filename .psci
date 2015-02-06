@@ -1,0 +1,3 @@
+:m src/ps/Chapter2.purs
+:m src/ps/TestModule.purs
+:m bower_components/purescript-math/src/Math.purs
